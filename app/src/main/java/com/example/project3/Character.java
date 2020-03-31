@@ -6,7 +6,12 @@ public class Character {
     private int Health;
     private int Experience;
 
-
+    public  Character(String name){
+        Name = name;
+        Gold = 0;
+        Health = 10;
+        Experience = 0;
+    }
     void setName(String name){
         Name = name;
     }
