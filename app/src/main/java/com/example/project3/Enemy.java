@@ -4,6 +4,12 @@ public class Enemy extends Character {
     int AttackValue;
     int Defense;
 
+    public Enemy(int atk, int def, String name){
+        super(name);
+        AttackValue = atk;
+        Defense = def;
+    }
+
     void setAttackValue(int atk){
         AttackValue = atk;
     }
