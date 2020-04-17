@@ -42,3 +42,5 @@ public class Ally extends Character {
     void setLevel(int level){Level = level;}
     int getLevel(){return Level;}
 }
+
+//Push test Chongyuan Chen
