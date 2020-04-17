@@ -39,3 +39,5 @@ public class Ally extends Character {
         return Con;
     }
 }
+
+//Push test Chongyuan Chen
