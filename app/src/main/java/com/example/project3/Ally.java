@@ -5,6 +5,7 @@ public class Ally extends Character {
     int Str;
     int Wis;
     int Con;
+    int Level;
 
     public Ally(String name, int job, int str, int wis, int con){
         super(name);
@@ -38,4 +39,6 @@ public class Ally extends Character {
     int getCon(){
         return Con;
     }
+    void setLevel(int level){Level = level;}
+    int getLevel(){return Level;}
 }
