@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">Project3</string>
+    <string name="app_name">DungeonCrawlerGame</string>
+    <string name="Title">Dungeon Crawler Game</string>
+    <string name="newGame">New Run</string>
+    <string name="continueRun">Continue Run</string>
+    <string name="Options">Options</string>
+    <string name="this_is_a_test_for_new_game">This is a test for new game.</string>
+    <string name="hello_hero_welcome_to_the_tower_of_battles">Hello Hero! Welcome to the Tower of Battles!</string>
+    <string name="lets_go">Lets Go!</string>
+    <string name="button">Button</string>
+    <string name="shop">Shop</string>
+    <string name="PlayerNum">Player</string>
 </resources>
