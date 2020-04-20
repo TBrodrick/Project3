@@ -17,30 +17,49 @@ public class BattleFloor extends  Floors {
         setFloorType(0);
 
     }
-    //Constructor
+
+    /**
+     *
+     * @param n floor number
+     * @param t list of ally characters moving from floor to floor
+     */
     BattleFloor(int n,ArrayList<Ally> t){//n is floor number
         super(0,n);
         generateEnemy(n);
         a = t;
     }
 
-
-    /*
-    //could be in main
-    //checks enemy health and removes dead enemies
-    void removeEnemy(){     //for now loops through enemy array list, considering combining with target make faster
-        for(Enemy i: e)
-        {
-            if(i.getHealth()<=0)
+    /**
+     *
+     * @param a ally making attack
+     * @param numT number of enemies targeted
+     * @param i index of first enemy targeted
+     */
+    public void targetEnemy(Ally a,int numT,int i){
+        if(numT<1)
+            return;
+        else if (numT==1) {
+            e.get(i).takeDamage(e.get(i).getDefense()-a.getStr());  //may need to add attack function based on class
+            if(e.get(i).getHealth()<=0)
                 e.remove(i);
         }
+        else
+        {
+            for(int j = i; j<numT;j++){
+                e.get(j).takeDamage(e.get(j).getDefense()-a.getStr());  //may need to add attack function based on class
+                if(e.get(j).getHealth()<=0)
+                    e.remove(j);
+            }
+        }
+
     }
 
-    private void targetEnemy(){
-
-    }
-*/
     //generates enemies based on floor level
+
+    /**
+     *
+     * @param fn floor number
+     */
     private void generateEnemy(int fn){
 
         if(fn%10==0)        //boss floor

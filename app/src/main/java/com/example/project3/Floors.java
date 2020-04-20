@@ -12,17 +12,27 @@ public class Floors {
         floorNum = 0;
     }
 
-    public Floors(int f, int n){
+    /**
+     *
+     * @param n floor type
+     * @param f floor number
+     */
+    public Floors(int n, int f){
         floorNum = n;
         floorType = f;
     }
 
     //copy Constructor
-    public Floors(Floors a){
+
+    public Floors(Floors a) {
         floorNum = a.getFloorNum(); //should I use this?
         floorType = a.getFloorType();
     }
 
+    /**
+     *
+     * @param f integer floor type
+     */
     void setFloorType(int f) {
         floorType = f;
     }
@@ -30,6 +40,10 @@ public class Floors {
         return floorType;
     }
 
+    /**
+     *
+     * @param n integer floor number
+     */
     void setFloorNum(int n){floorNum = n;}
     void incFloorNum(){floorNum++;}
     int getFloorNum(){return floorNum;}
