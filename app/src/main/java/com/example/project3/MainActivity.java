@@ -9,16 +9,20 @@ public class MainActivity extends AppCompatActivity {
     int gold;
     int floorsSinceRest;
     int lastFloor;
-    int floor;
+    int floorNumber;
+    int currentFloorType = 0;
+    Floors CurrentFloor = new Floors(floorNumber, currentFloorType);
 
     private void genFloor(){
-        lastFloor = floor;
-        if(floor != 1)
+        lastFloor = currentFloorType;
+        if(lastFloor != 2)
             floorsSinceRest++;
         if(floorsSinceRest > 4)
-            floor = 1;
+            currentFloorType = 1;
         else{
-            floor = (int)(Math.random() * 4);
+            do {
+                currentFloorType = (int) (Math.random() * 4);
+            }while(currentFloorType == lastFloor);
         }
     }
 

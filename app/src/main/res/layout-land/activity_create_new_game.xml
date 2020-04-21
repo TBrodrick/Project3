@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateNewGame">
+
+    <Button
+        android:id="@+id/Flee"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="24dp"
+        android:text="Flee"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Introduction"
+        android:layout_width="318dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="156dp"
+        android:text="@string/hello_hero_welcome_to_the_tower_of_battles"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/Start"
+        android:layout_width="216dp"
+        android:layout_height="65dp"
+        android:text="@string/lets_go"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Introduction"
+        app:layout_constraintVertical_bias="0.125" />
+
+    <Button
+        android:id="@+id/Items"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="10dp"
+        android:text="Items"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/Abilities"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/Attack"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="10dp"
+        android:text="attack"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/Items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.985" />
+
+    <Button
+        android:id="@+id/Abilities"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="10dp"
+        android:text="Abilities"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/Flee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/PlayerNum"
+        android:layout_width="102dp"
+        android:layout_height="57dp"
+        android:layout_marginBottom="15dp"
+        android:text="Test"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/Attack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
