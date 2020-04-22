@@ -2,6 +2,7 @@ package com.example.project3;
 
 public class Character {
     private String Name;
+    private int maxHealth
     private int Health;
     private int Experience;
     private int atkStat;
@@ -10,6 +11,7 @@ public class Character {
     public Character()
     {
         Name = "Placeholder";
+        maxHealth = 10;
         Health = 10;
         Experience = 0;
         atkStat = 1;
@@ -22,6 +24,7 @@ public class Character {
      */
     public Character(String name){
         Name = name;
+        maxHealth = 10;
         Health = 10;
         Experience = 0;
         atkStat = 1;
@@ -94,6 +97,22 @@ public class Character {
      */
     int getHealth(){
         return Health;
+    }
+    
+    /**
+     *
+     * @param health is the amount of health
+     */
+    void setMaxHealth(int health){
+        maxHealth = health;
+    }
+
+    /**
+     *
+     * @return the health
+     */
+    int getMaxHealth(){
+        return maxHealth;
     }
 
     /**

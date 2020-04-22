@@ -6,8 +6,8 @@ import java.util.Random;
 public class BattleFloor extends  Floors {
 
     //variables
-    private ArrayList<Enemy> e;          //an array of all enemies on this floor needs a generate enemy or get enemy
-    private ArrayList<Ally> a;         //an array of all allies (moved from floor to floor)(get allies?)
+    private Enemy Enemies[];          //an array of all enemies on this floor needs a generate enemy or get enemy
+    private Ally Allies[];         //an array of all allies (moved from floor to floor)(get allies?)
     private int numEnemies;
 
     //functions
@@ -21,12 +21,12 @@ public class BattleFloor extends  Floors {
     /**
      *
      * @param n floor number
-     * @param t list of ally characters moving from floor to floor
+     * @param allies list of ally characters moving from floor to floor
      */
-    BattleFloor(int n,ArrayList<Ally> t){//n is floor number
+    BattleFloor(int n,Ally[] allies){//n is floor number
         super(0,n);
         generateEnemy(n);
-        a = t;
+        Allies = allies;
     }
 
     /**
@@ -35,7 +35,7 @@ public class BattleFloor extends  Floors {
      * @param numT number of enemies targeted
      * @param i index of first enemy targeted
      */
-    public void targetEnemy(Ally a,int numT,int i){
+   /* public void targetEnemy(Ally a,int numT,int i){
         if(numT<1)
             return;
         else if (numT==1) {
@@ -52,7 +52,7 @@ public class BattleFloor extends  Floors {
             }
         }
 
-    }
+    }*/
 
     //generates enemies based on floor level
 
@@ -65,11 +65,11 @@ public class BattleFloor extends  Floors {
         if(fn%10==0)        //boss floor
         {
             Enemy boss = new Enemy(0,0,"Boss");     //place holder we need to go over how to generate attack
-            e.add(boss);
+            Enemies[0] = boss;
             for(int i = 1; i<3;i++){
                 Enemy newEnemy = new Enemy(0,0,"Enemy");
                 //randomly determine attack here
-                e.add(newEnemy);
+                Enemies[i] = newEnemy;
             }
         }
         else if(fn<10)      //4 weak enemies
@@ -77,7 +77,7 @@ public class BattleFloor extends  Floors {
             for(int i = 0; i<4;i++){
                 Enemy newEnemy = new Enemy(0,0,"Enemy");
                 //randomly determine attack here
-                e.add(newEnemy);
+                Enemies[i] = newEnemy;
             }
         }
         else//6 medium to difficult enemies
@@ -85,7 +85,7 @@ public class BattleFloor extends  Floors {
             for(int i = 0; i<6;i++){
                 Enemy newEnemy = new Enemy(0,0,"Enemy");
                 //randomly determine attack here based on level
-                e.add(newEnemy);
+                Enemies[i] = newEnemy;
             }
         }
     }
