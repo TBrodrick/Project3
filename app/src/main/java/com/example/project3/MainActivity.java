@@ -2,30 +2,91 @@ package com.example.project3;
 
 import androidx.appcompat.app.AppCompatActivity;
 import java.math.*;
+import java.util.ArrayList;
+
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-    Ally Allies[] = new Ally[4];
+    private Ally Allies[];
     int gold;
-    int floorsSinceRest;
-    int lastFloor;
+    private int floodValue ;
+    private ArrayList<int[]> FloorList;
+    private int arrayPos;
+    int floodHeight;
     int floorNumber;
-    int currentFloorType = 0;
-    Floors CurrentFloor = new Floors(floorNumber, currentFloorType);
+    int currentFloor;
 
+    private int currentScore;
+    private int highScore;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    /**
+     * Generates the next floor.
+     * Every 10 floors is a boss, every 6th is a rest (unless it's a boss), for every other floor 6/9 chance of battle, 2/9 chance of shop, 1/9 chance of event
+     * Then adds floor data to database
+     */
     private void genFloor(){
-        lastFloor = currentFloorType;
-        if(lastFloor != 2)
-            floorsSinceRest++;
-        if(floorsSinceRest > 4)
-            currentFloorType = 1;
+        int select = (int)Math.random()*9;
+        floorNumber++;
+        arrayPos++;
+        if(floorNumber % 10 == 0){
+            //generate boss floor
+        }
+        else if(floorNumber % 6 == 0){
+            //generates rest floor
+        }
         else{
-            do {
-                currentFloorType = (int) (Math.random() * 4);
-            }while(currentFloorType == lastFloor);
+            if(floorNumber == 9){
+                //generate rest floor
+            }
+            if(select <= 6){
+                //generate Battle
+            }
+            else if(select <= 8){
+                //generate shop
+            }
+            else{
+                //generate event
+            }
         }
     }
 
+    /**
+     * Moves the player up or down floors
+     * @param up true if moving upwards, false if going down
+     */
+    private void moveFloor(boolean up){
+        if(up){
+            if(arrayPos == FloorList.size()) {
+                genFloor();
+                currentFloor++;
+            }
+            arrayPos++;
+        }
+        else{
+            if(currentFloor == floodHeight || arrayPos == 0)
+                gameOver();
+            else{
+                arrayPos--;
+                //gen previous floor
+            }
+        }
+        if(floodValue % 10 > 2){
+            FloorList.remove(0);
+        }
+    }
+
+    /**
+     * Gives you average party level
+     * @param level of party
+     * @return a new generated Enemy
+     */
     private Enemy genEnemy(int level){
         int atk = (int)(Math.random()*3)*getLevel();
         int def = (int)(Math.random()*3)*getLevel();
@@ -58,9 +119,8 @@ public class MainActivity extends AppCompatActivity {
         total /= 4;
         return total;
     }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+    private void gameOver(){
+
     }
 }
