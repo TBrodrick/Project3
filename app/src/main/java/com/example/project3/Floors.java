@@ -1,15 +1,23 @@
 package com.example.project3;
 
+import java.util.ArrayList;
+
 public class Floors {
     //variables
-    private int floorType;      //0 for combat, 1 for shop, 2 for rest, 3 for boss floors, 4 for event floors (I think)
+    private int floorType;      //0 for combat, 1 for shop, 2 for rest, 3 event floors, 4 rest floors
     private int floorNum;
-
+    private Enemy[] e = {null,null,null,null};          //an array of all enemies on this floor needs a generate enemy or get enemy
+    private Ally[] a;         //an array of all allies (moved from floor to floor)(get allies?)
+    private int numEnemies;
 
     //default constructor
     public Floors(){
         floorType = 0;
         floorNum = 0;
+    }
+    public Floors(int n, int f){
+        floorNum =n;
+        floorType = f;
     }
 
     /**
@@ -17,9 +25,10 @@ public class Floors {
      * @param n floor type
      * @param f floor number
      */
-    public Floors(int n, int f){
+    public Floors(int n, int f, Ally[] a1){ //consider including ally array
         floorNum = n;
         floorType = f;
+        a = a1;
     }
 
     //copy Constructor

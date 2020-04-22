@@ -58,7 +58,7 @@ public class BattleFloor extends  Floors {
 
     /**
      *
-     * @param fn floor number
+     * @param fn floor number used to determine enemy difficulty
      */
     private void generateEnemy(int fn){
 

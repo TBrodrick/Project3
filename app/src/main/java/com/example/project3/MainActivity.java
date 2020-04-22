@@ -11,7 +11,7 @@ public class MainActivity extends AppCompatActivity {
     int lastFloor;
     int floorNumber;
     int currentFloorType = 0;
-    Floors CurrentFloor = new Floors(floorNumber, currentFloorType);
+    Floors CurrentFloor = new Floors(floorNumber, currentFloorType,Allies);
 
     private void genFloor(){
         lastFloor = currentFloorType;
