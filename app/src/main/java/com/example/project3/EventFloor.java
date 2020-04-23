@@ -17,8 +17,13 @@ public class EventFloor extends Floors {
         super(n,3,a);
     }
 
+    //alternative constructor
+    EventFloor(int n)
+    {
+        super(n,3);
+    }
+
     int mine() {
         return (int)(Math.random() * 50) + 50;
     }
-
 }

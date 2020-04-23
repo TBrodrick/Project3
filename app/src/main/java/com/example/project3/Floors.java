@@ -15,6 +15,12 @@ public class Floors {
         floorType = 0;
         floorNum = 0;
     }
+
+    /**
+     *
+     * @param n floor number
+     * @param f floor type
+     */
     public Floors(int n, int f){
         floorNum =n;
         floorType = f;
@@ -24,6 +30,7 @@ public class Floors {
      *
      * @param n floor type
      * @param f floor number
+     * @param a1 array of allies
      */
     public Floors(int n, int f, Ally[] a1){ //consider including ally array
         floorNum = n;

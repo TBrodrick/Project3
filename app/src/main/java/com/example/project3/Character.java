@@ -2,7 +2,7 @@ package com.example.project3;
 
 public class Character {
     private String Name;
-    private int maxHealth
+    private int maxHealth;
     private int Health;
     private int Experience;
     private int atkStat;

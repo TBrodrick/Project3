@@ -19,10 +19,14 @@ public class RestFloor extends Floors {
         super(n,4,a);
     }
 
+    /**
+     *
+     * @param a an array of allies
+     */
     void rest(Ally[] a)
     {
         for(int i = 0; i< 4; i++){
-            a[i].heal(50);      //change to set health max
+            a[i].setHealth(a[i].getMaxHealth());      //change to set health max
         }
     }
 }
