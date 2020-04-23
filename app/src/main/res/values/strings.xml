@@ -10,4 +10,35 @@
     <string name="button">Button</string>
     <string name="shop">Shop</string>
     <string name="PlayerNum">Player</string>
+    <string name="player1">Player1</string>
+    <string name="player2">Player2</string>
+    <string name="player3">Player3</string>
+    <string name="player4">Player4</string>
+    <string name="item1">Item1</string>
+    <string name="item2">Item2</string>
+    <string name="item3">Item3</string>
+    <string name="item">Item</string>
+    <string name="price">Price</string>
+    <string name="flee">Flee</string>
+    <string name="attack">attack</string>
+    <string name="shoptest">ShopTest</string>
+    <string name="eventtest">EventTest</string>
+    <string name="ally1">Ally1</string>
+    <string name="ally2">Ally2</string>
+    <string name="ally3">Ally3</string>
+    <string name="ally4">Ally4</string>
+    <string name="textview">TextView</string>
+    <string name="enemy1">Enemy1</string>
+    <string name="enemy2">Enemy2</string>
+    <string name="enemy3">Enemy3</string>
+    <string name="enemy4">Enemy4</string>
+    <string name="hp">HP</string>
+    <string name="floor">Floor</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_explanation">Event Explanation</string>
+    <string name="choice1">Choice1</string>
+    <string name="choice2">Choice2</string>
+    <string name="choice3">Choice3</string>
+
+
 </resources>
