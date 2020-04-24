@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.math.*;
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,12 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private int highScore;
 
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Allies[0] = new Character("Tim");
-        Allies[1] = new Character("Bob");
-        Allies[2] = new Character("Henry");
-        Allies[3] = new Character("Dave");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
@@ -57,36 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Generates the next floor.
-     * Every 10 floors is a boss, every 6th is a rest (unless it's a boss), for every other floor 6/9 chance of battle, 2/9 chance of shop, 1/9 chance of event
-     * Then adds floor data to database
-     */
-    private void genFloor(){
-        int select = (int)Math.random()*9;
-        floorNumber++;
-        arrayPos++;
-        if(floorNumber % 10 == 0){
-            //generate boss floor
-        }
-        else if(floorNumber % 6 == 0){
-            //generates rest floor
-        }
-        else{
-            if(floorNumber == 9){
-                //generate event floor
-            }
-            if(select <= 6){
-                //generate Battle
-            }
-            else if(select <= 8){
-                //generate shop
-            }
-            else{
-                //generate event
-            }
-        }
-    }
+
 
     /**
      * Moves the player up or down floors
@@ -95,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private void moveFloor(boolean up){
         if(up){
             if(arrayPos == FloorList.size()) {
-                genFloor();
+                //genFloor();
                 currentFloor++;
             }
             arrayPos++;

@@ -35,11 +35,11 @@ public class ShopFloor extends Floors{
      */
     private Item[] genItems(int fn)
     {
-        Item[] retArr = null;
+        Item[] retArr = new Item[3];
         int pick;
 
         Item newItem = new Item();
-        for(int i = 0; i<10; i++)
+        for(int i = 0; i<3; i++)
         {
             pick = (int)(Math.random()*3);
             if(pick==0){                    //Item that will increase Attack

@@ -47,7 +47,7 @@ public class BattleFloor extends  Floors {
                 {
                     if(Enemies[j].getHealth()>0)
                     {
-                        Enemies[j].takeDamage(Enemies[j].getDefStat()-Allies[i].getAtkStat());
+                        Enemies[j].takeDamage(Allies[i].getAtkStat() - Enemies[j].getDefStat());
                         break;
                     }
                 }
@@ -58,7 +58,7 @@ public class BattleFloor extends  Floors {
                 {
                     if(Allies[j].getHealth()>0)
                     {
-                        Allies[j].takeDamage(Allies[j].getDefStat()-Enemies[i].getAtkStat());
+                        Allies[j].takeDamage(Enemies[i].getAtkStat() - Allies[j].getDefStat());
                         break;
                     }
                 }
@@ -88,10 +88,9 @@ public class BattleFloor extends  Floors {
     private void generateEnemy(int fn)
     {
         int rand = (int)(Math.random()*7);
-        Character newEnemy = new Character(names[rand],fn,fn);
-        Enemies[0] = newEnemy;
-        for(int i = 1; i<4;i++)
+        for(int i = 0; i<4;i++)
         {
+            Character newEnemy = new Character(names[rand],fn,fn);
             rand = (int)(Math.random()*7);
             newEnemy.setName(names[rand]);
             Enemies[i]=newEnemy;

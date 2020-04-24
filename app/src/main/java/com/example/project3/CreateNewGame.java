@@ -2,7 +2,9 @@ package com.example.project3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +30,7 @@ public class CreateNewGame extends AppCompatActivity {
     private int highScore;
 
     int loop = 0;
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Allies[0] = new Character("Tim");
@@ -37,6 +40,8 @@ public class CreateNewGame extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_game);
+        final Button Victory = (Button)findViewById(R.id.Victory);
+        Victory.setVisibility(View.INVISIBLE);
         final Button start = (Button) findViewById(R.id.Start);
         final Button attack = (Button) findViewById(R.id.Attack);
         //final Button abilities = (Button) findViewById(R.id.Abilities);
@@ -81,15 +86,16 @@ public class CreateNewGame extends AppCompatActivity {
     }
 
 
-    public void startBattle(Button start, TextView intro, Button attack, Button flee, TextView PlayerNum)
+    public void startBattle(Button start, TextView intro, final Button attack, final Button flee, TextView PlayerNum)
     {
+        final Button Victory = (Button)findViewById(R.id.Victory);
+        Victory.setVisibility(View.INVISIBLE);
         //Defines the battle taking place
         currentFloor = 1;
         final BattleFloor Current = new BattleFloor(currentFloor, Allies);
 
         for(int i = 0; i < 4; i++)
             Current.getEnemy(i).setDefStat(0);
-
         //Ally Health set to appropriate text views
         final TextView p1Health = (TextView)findViewById(R.id.Ally1HP);
         final TextView p2Health = (TextView)findViewById(R.id.Ally2HP);
@@ -159,12 +165,52 @@ public class CreateNewGame extends AppCompatActivity {
                 E2Health.setText(Current.getEnemy(1).getHealth() + " / " + Current.getEnemy(1).getMaxHealth());
                 E3Health.setText(Current.getEnemy(2).getHealth() + " / " + Current.getEnemy(2).getMaxHealth());
                 E4Health.setText(Current.getEnemy(3).getHealth() + " / " + Current.getEnemy(3).getMaxHealth());
+
+                if(Allies[0].getHealth() <= 0 && Allies[1].getHealth() <= 0 && Allies[2].getHealth() <= 0 && Allies[3].getHealth() <= 0){
+                    //game over
+                }
+                else if(Current.getEnemy(0).getHealth() <= 0 && Current.getEnemy(1).getHealth() <= 0 && Current.getEnemy(2).getHealth() <= 0 && Current.getEnemy(3).getHealth() <= 0){
+                    attack.setVisibility(View.INVISIBLE);
+                    flee.setVisibility(View.INVISIBLE);
+                    Victory.setVisibility(View.VISIBLE);
+                }
+
             }
         });
     }
 
+    /**
+     * Generates the next floor.
+     * Every 10 floors is a boss, every 6th is a rest (unless it's a boss), for every other floor 6/9 chance of battle, 2/9 chance of shop, 1/9 chance of event
+     * Then adds floor data to database
+     */
+    private void genFloor(){
+        int select = (int)Math.random()*9;
+        floorNumber++;
+        arrayPos++;
+
+        if(floorNumber % 6 == 0){
+            //generates rest floor
+        }
+        else{
+            if(floorNumber == 9){
+                //generate rest floor
+            }
+            if(select <= 6){
+                //generate Battle
+            }
+            else if(select <= 8){
+                //generate shop
+            }
+            else{
+                //generate event
+            }
+        }
+    }
+
     public void openShop()
     {
+        ShopFloor Current = new ShopFloor();
         Intent intent = new Intent(this, com.example.project3.shop.class);
         startActivity(intent);
     }
