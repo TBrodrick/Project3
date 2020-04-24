@@ -1,11 +1,12 @@
 package com.example.project3;
 import android.content.ClipData;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ShopFloor extends Floors{
     //variables
-    private Item [] items;
+    private Item [] items = new Item[3];
     private String [] names= {"Scrap","Repair Kit","Sword.exe","Bow.exe","Staff.exe","Axe.exe","Shield.exe","Armor.exe"};
     private String [] descriptions = {"Replenishes Health", "Increase Attack", "Increase Defence"};
     private int gold;
@@ -17,7 +18,6 @@ public class ShopFloor extends Floors{
     }
 
     /**
-     *
      * @param n floor number
      * @param g total gold held by player
      */
@@ -38,9 +38,9 @@ public class ShopFloor extends Floors{
         Item[] retArr = new Item[3];
         int pick;
 
-        Item newItem = new Item();
         for(int i = 0; i<3; i++)
         {
+            Item newItem = new Item();
             pick = (int)(Math.random()*3);
             if(pick==0){                    //Item that will increase Attack
                 newItem = attackItem(fn);
@@ -56,6 +56,8 @@ public class ShopFloor extends Floors{
         }
         return retArr;
     }
+
+    Item getItem(int index){return items[index];}
 
     /**
      *
@@ -119,16 +121,16 @@ public class ShopFloor extends Floors{
 
     /**
      *
-     * @param i item player attempts to buy
+     * @param index index of item player attempts to buy
      * @param fn floor number
      * @return tue or false based on success
      */
-    boolean buyItems(Item i, int fn)
+    boolean buyItems(int index, int fn)
     {
-        if(i.getCost()>gold)
+        if(items[index].getCost()>gold)
             return false;
         else {
-            gold -= i.getCost();
+            gold -= items[index].getCost();
             return true;
         }
     }

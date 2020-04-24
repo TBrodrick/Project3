@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class CreateNewGame extends AppCompatActivity {
     private Character Allies[] = new Character[4];
-    int gold;
+    int gold = 10000;
     private int floodValue;
     private ArrayList<int[]> FloorList;
     private int arrayPos;
@@ -210,9 +210,106 @@ public class CreateNewGame extends AppCompatActivity {
 
     public void openShop()
     {
-        ShopFloor Current = new ShopFloor();
-        Intent intent = new Intent(this, com.example.project3.shop.class);
-        startActivity(intent);
+        final ShopFloor Current = new ShopFloor(currentFloor, gold);
+        final ImageView[] Images = new ImageView[3];
+        final Button[] Buttons = new Button[3];
+        final TextView[] Text = new TextView[6];
+
+        setContentView(R.layout.activity_shop);
+        //Intent intent = new Intent(this, com.example.project3.shop.class);
+        //startActivity(intent);
+        final ImageView Item1Pic = (ImageView)findViewById(R.id.Item1Pic);
+        final ImageView Item2Pic = (ImageView)findViewById(R.id.Item2Pic);
+        final ImageView Item3Pic = (ImageView)findViewById(R.id.Item3Pic);
+        Images[0] = Item1Pic;
+        Images[1] = Item2Pic;
+        Images[2] = Item3Pic;
+
+        final Button Buy1 = (Button)findViewById(R.id.Buy1);
+        final Button Buy2 = (Button)findViewById(R.id.Buy2);
+        final Button Buy3 = (Button)findViewById(R.id.Buy3);
+
+        final TextView Item1 = (TextView)findViewById(R.id.Item1);
+        final TextView Item2 = (TextView)findViewById(R.id.Item2);
+        final TextView Item3 = (TextView)findViewById(R.id.Item3);
+
+        final TextView Price1 = (TextView)findViewById(R.id.Price1);
+        final TextView Price2 = (TextView)findViewById(R.id.Price2);
+        final TextView Price3 = (TextView)findViewById(R.id.Price3);
+
+        Item1.setText(Current.getItem(0).getName());
+        Item2.setText(Current.getItem(1).getName());
+        Item3.setText(Current.getItem(2).getName());
+
+        Text[0] = Item1;
+        Text[1] = Item2;
+        Text[2] = Item3;
+        Text[3] = Price1;
+        Text[4] = Price2;
+        Text[5] = Price3;
+
+        Price1.setText("Cost: " + Current.getItem(0).getCost());
+        Price2.setText("Cost: " + Current.getItem(1).getCost());
+        Price3.setText("Cost: " + Current.getItem(2).getCost());
+
+        for(int i = 0; i < 3; i++){
+            if(Text[i].getText().equals("Sword.exe")){
+                Images[i].setImageResource(R.drawable.weapon);
+            }
+            else if(Text[i].getText().equals("Axe.exe")){
+                Images[i].setImageResource(R.drawable.axe);
+            }
+            else if(Text[i].getText().equals("Staff.exe")){
+                Images[i].setImageResource(R.drawable.staff);
+            }
+            else if(Text[i].getText().equals("Bow.exe")){
+                Images[i].setImageResource(R.drawable.bow);
+            }
+            else if(Text[i].getText().equals("Scrap")){
+                Images[i].setImageResource(R.drawable.scrap);
+            }
+            else if(Text[i].getText().equals("Armor.exe")){
+                Images[i].setImageResource(R.drawable.armor);
+            }
+            else if(Text[i].getText().equals("Shield.exe")){
+                Images[i].setImageResource(R.drawable.shield);
+            }
+            else if(Text[i].getText().equals("Repair Kit")){
+                Images[i].setImageResource(R.drawable.health);
+            }
+        }
+
+        Buy1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.buyItems(0, currentFloor);
+                Item1Pic.setVisibility(View.INVISIBLE);
+                Buy1.setVisibility(View.INVISIBLE);
+                Item1.setVisibility(View.INVISIBLE);
+                Price1.setVisibility(View.INVISIBLE);
+            }
+        });
+        Buy2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.buyItems(1, currentFloor);
+                Item2Pic.setVisibility(View.INVISIBLE);
+                Buy2.setVisibility(View.INVISIBLE);
+                Item2.setVisibility(View.INVISIBLE);
+                Price2.setVisibility(View.INVISIBLE);
+            }
+        });
+        Price1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.buyItems(2, currentFloor);
+                Item3Pic.setVisibility(View.INVISIBLE);
+                Buy3.setVisibility(View.INVISIBLE);
+                Item3.setVisibility(View.INVISIBLE);
+                Price3.setVisibility(View.INVISIBLE);
+            }
+        });
+
     }
 
     public void newEvent()
