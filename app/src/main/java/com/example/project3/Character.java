@@ -33,6 +33,21 @@ public class Character {
 
     /**
      *
+     * @param name is the name
+     * @param atk is the attack value
+     * @param def is the Defense value
+     */
+    public Character(String name, int atk, int def){
+        Name = name;
+        maxHealth = 10;
+        Health = 10;
+        Experience = 0;
+        atkStat = atk;
+        defStat = def;
+    }
+
+    /**
+     *
      * @return the defense stat
      */
     int getAtkStat()

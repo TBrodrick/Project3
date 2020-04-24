@@ -12,11 +12,29 @@ import android.widget.Toast;
 
 import com.example.project3.R;
 
+import java.util.ArrayList;
+
 public class CreateNewGame extends AppCompatActivity {
+    private Character Allies[] = new Character[4];
+    int gold;
+    private int floodValue;
+    private ArrayList<int[]> FloorList;
+    private int arrayPos;
+    int floodHeight;
+    int floorNumber = 0;
+    int currentFloor = 0;
+
+    private int currentScore;
+    private int highScore;
 
     int loop = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Allies[0] = new Character("Tim");
+        Allies[1] = new Character("Bob");
+        Allies[2] = new Character("Henry");
+        Allies[3] = new Character("Dave");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_game);
         final Button start = (Button) findViewById(R.id.Start);
@@ -65,6 +83,59 @@ public class CreateNewGame extends AppCompatActivity {
 
     public void startBattle(Button start, TextView intro, Button attack, Button flee, TextView PlayerNum)
     {
+        //Defines the battle taking place
+        currentFloor = 1;
+        final BattleFloor Current = new BattleFloor(currentFloor, Allies);
+
+        for(int i = 0; i < 4; i++)
+            Current.getEnemy(i).setDefStat(0);
+
+        //Ally Health set to appropriate text views
+        final TextView p1Health = (TextView)findViewById(R.id.Ally1HP);
+        final TextView p2Health = (TextView)findViewById(R.id.Ally2HP);
+        final TextView p3Health = (TextView)findViewById(R.id.Ally3HP);
+        final TextView p4Health = (TextView)findViewById(R.id.Ally4HP);
+
+        //Ally attack and defense set to appropriate text views
+        final TextView p1Stats = (TextView)findViewById(R.id.AllyAttack1);
+        final TextView p2Stats = (TextView)findViewById(R.id.AllyAttack2);
+        final TextView p3Stats = (TextView)findViewById(R.id.AllyAttack3);
+        final TextView p4Stats = (TextView)findViewById(R.id.AllyAttack4);
+
+        //Display Allied Stats at battle start
+        p1Health.setText(Allies[0].getMaxHealth() + " / " + Allies[0].getHealth());
+        p2Health.setText(Allies[1].getMaxHealth() + " / " + Allies[1].getHealth());
+        p3Health.setText(Allies[2].getMaxHealth() + " / " + Allies[2].getHealth());
+        p4Health.setText(Allies[3].getMaxHealth() + " / " + Allies[3].getHealth());
+        p1Stats.setText(Allies[0].getAtkStat() + " / " + Allies[0].getDefStat());
+        p2Stats.setText(Allies[1].getAtkStat() + " / " + Allies[1].getDefStat());
+        p3Stats.setText(Allies[2].getAtkStat() + " / " + Allies[2].getDefStat());
+        p4Stats.setText(Allies[3].getAtkStat() + " / " + Allies[3].getDefStat());
+
+        //Enemy Health set to appropriate text views
+        final TextView E1Health = (TextView)findViewById(R.id.Enemy1Health);
+        final TextView E2Health = (TextView)findViewById(R.id.Enemy2Health);
+        final TextView E3Health = (TextView)findViewById(R.id.Enemy3Health);
+        final TextView E4Health = (TextView)findViewById(R.id.Enemy4Health);
+
+        //Enemy attack and defense set to appropriate text views
+        final TextView E1Stats = (TextView)findViewById(R.id.Enemy1Stats);
+        final TextView E2Stats = (TextView)findViewById(R.id.Enemy2Stats);
+        final TextView E3Stats = (TextView)findViewById(R.id.Enemy3Stats);
+        final TextView E4Stats = (TextView)findViewById(R.id.Enemy4Stats);
+
+        //Display Enemy Health at start of combat
+        E1Health.setText(Current.getEnemy(0).getHealth() + " / " + Current.getEnemy(0).getMaxHealth());
+        E2Health.setText(Current.getEnemy(1).getHealth() + " / " + Current.getEnemy(1).getMaxHealth());
+        E3Health.setText(Current.getEnemy(2).getHealth() + " / " + Current.getEnemy(2).getMaxHealth());
+        E4Health.setText(Current.getEnemy(3).getHealth() + " / " + Current.getEnemy(3).getMaxHealth());
+
+        //Display Enemy stats on combat start
+        E1Stats.setText(Current.getEnemy(0).getAtkStat() + " / " + Current.getEnemy(0).getDefStat());
+        E2Stats.setText(Current.getEnemy(1).getAtkStat() + " / " + Current.getEnemy(1).getDefStat());
+        E3Stats.setText(Current.getEnemy(2).getAtkStat() + " / " + Current.getEnemy(2).getDefStat());
+        E4Stats.setText(Current.getEnemy(3).getAtkStat() + " / " + Current.getEnemy(3).getDefStat());
+
         start.setVisibility(View.INVISIBLE);
         intro.setVisibility(View.INVISIBLE);
         attack.setVisibility(View.VISIBLE);
@@ -75,10 +146,21 @@ public class CreateNewGame extends AppCompatActivity {
         attack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You dealt 5 damage to the enemy!", Toast.LENGTH_SHORT).show();
+                Current.attackRound();
+
+                //Display Ally Health after attack round
+                p1Health.setText(Allies[0].getHealth() + " / " + Allies[0].getMaxHealth());
+                p2Health.setText(Allies[1].getHealth() + " / " + Allies[1].getMaxHealth());
+                p3Health.setText(Allies[2].getHealth() + " / " + Allies[2].getMaxHealth());
+                p4Health.setText(Allies[3].getHealth() + " / " + Allies[3].getMaxHealth());
+
+                //Display Enemy Health after attack round
+                E1Health.setText(Current.getEnemy(0).getHealth() + " / " + Current.getEnemy(0).getMaxHealth());
+                E2Health.setText(Current.getEnemy(1).getHealth() + " / " + Current.getEnemy(1).getMaxHealth());
+                E3Health.setText(Current.getEnemy(2).getHealth() + " / " + Current.getEnemy(2).getMaxHealth());
+                E4Health.setText(Current.getEnemy(3).getHealth() + " / " + Current.getEnemy(3).getMaxHealth());
             }
         });
-
     }
 
     public void openShop()
