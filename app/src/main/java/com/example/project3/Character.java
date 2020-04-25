@@ -162,4 +162,20 @@ public class Character {
     {
         return Experience;
     }
+
+    /**
+     *
+     * @param n floor number
+     */
+    void setBase(int n)
+    {
+        atkStat = n/5;
+        defStat = atkStat;
+    }
+
+    void addVar()
+    {
+        atkStat+=(2*defStat*((Math.random()%41)+80)/100)+1;
+        defStat = (int) Math.floor(defStat*((Math.random()%41)+80)/100);
+    }
 }

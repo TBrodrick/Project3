@@ -87,12 +87,14 @@ public class BattleFloor extends  Floors {
      */
     private void generateEnemy(int fn)
     {
-        int rand = (int)(Math.random()*7);
+        int rand;
         for(int i = 0; i<4;i++)
         {
-            Character newEnemy = new Character(names[rand],fn,fn);
             rand = (int)(Math.random()*7);
-            newEnemy.setName(names[rand]);
+
+            Character newEnemy = new Character(names[rand]);
+            newEnemy.setBase(fn);
+            newEnemy.addVar();
             Enemies[i]=newEnemy;
         }
     }
