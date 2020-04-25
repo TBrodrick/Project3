@@ -94,19 +94,21 @@
 
     <ImageView
         android:id="@+id/Ally1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="75dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:contentDescription="@string/ally1"
+        android:src="@drawable/robota"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
 
     <ImageView
         android:id="@+id/Ally2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/robotb"
         android:layout_marginStart="75dp"
         android:layout_marginTop="45dp"
         android:contentDescription="@string/ally2"
@@ -116,8 +118,9 @@
 
     <ImageView
         android:id="@+id/Ally3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/robotc"
         android:layout_marginStart="75dp"
         android:layout_marginTop="40dp"
         android:contentDescription="@string/ally3"
@@ -127,8 +130,9 @@
 
     <ImageView
         android:id="@+id/Ally4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/robotd"
         android:layout_marginStart="75dp"
         android:layout_marginTop="40dp"
         android:contentDescription="@string/ally4"

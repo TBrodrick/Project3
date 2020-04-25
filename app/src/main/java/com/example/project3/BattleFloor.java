@@ -107,6 +107,7 @@ public class BattleFloor extends  Floors {
     Character getEnemy(int index){
         return Enemies[index];
     }
+
     /**
      *
      * @param fn floor number
