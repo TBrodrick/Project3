@@ -24,7 +24,7 @@ public class CreateNewGame extends AppCompatActivity {
     private int arrayPos = 0;
     int floodHeight;
     int floorNumber = 0;
-    int currentFloor = 1;
+    int currentFloor = 0;
 
     private int currentScore;
     private int highScore;
@@ -164,6 +164,14 @@ public class CreateNewGame extends AppCompatActivity {
 
             }
         });
+        final Toast toast = Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_SHORT);
+        flee.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //toast.show();
+                moveFloor(false);
+            }
+        });
     }
 
     public void openShop(final ShopFloor Current)
@@ -281,12 +289,14 @@ public class CreateNewGame extends AppCompatActivity {
         MoveOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SaveShopFloor(Current);
                 moveFloor(true);
             }
         });
         GoBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SaveShopFloor(Current);
                 moveFloor(false);
             }
         });
@@ -303,7 +313,8 @@ public class CreateNewGame extends AppCompatActivity {
     }
 
     private void gameOver(){
-
+        Toast toast = Toast.makeText(getApplicationContext(), "Game Over", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     /**
@@ -312,22 +323,32 @@ public class CreateNewGame extends AppCompatActivity {
      */
     private void moveFloor(boolean up){
         if(up){
-            if(arrayPos == FloorList.size()) {
+            arrayPos++;
+            if(arrayPos == FloorList.size() ) {
                 genFloor();
                 currentFloor++;
             }
-            arrayPos++;
-        }
-        else{
-            if(currentFloor == floodHeight + 1 || arrayPos == 0)
-                gameOver();
-
             else{
-                arrayPos--;
+                currentFloor++;
                 if(FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 0)
                     startBattle(new BattleFloor(Allies, FloorList.get(arrayPos)));
                 else if(FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 1)
-                    openShop(new ShopFloor(FloorList.get(arrayPos)));
+                    openShop(new ShopFloor(FloorList.get(arrayPos), gold));
+            }
+        }
+        else {
+            if (currentFloor != 0) {
+                if (currentFloor == floodHeight || arrayPos == 0)
+                    gameOver();
+
+                else {
+                    arrayPos--;
+                    currentFloor--;
+                    if (FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 0)
+                        startBattle(new BattleFloor(Allies, FloorList.get(arrayPos)));
+                    else if (FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 1)
+                        openShop(new ShopFloor(FloorList.get(arrayPos), gold));
+                }
             }
         }
         if(floodValue % 10 > 2){
@@ -343,7 +364,11 @@ public class CreateNewGame extends AppCompatActivity {
         int[] enemies = new int[13];
         for(int a = 0; a < 4; a++) {
             for (int i = 0; i < 12; i += 3) {
-                enemies[i] = floor.getEnemy(a).getHealth();
+                if(floor.getEnemy(a).getHealth() <= 0)
+                    enemies[i] = 0;
+                else
+                    enemies[i] = floor.getEnemy(a).getMaxHealth();
+
                 enemies[i + 1] = floor.getEnemy(a).getAtkStat();
                 enemies[i + 2] = floor.getEnemy(a).getDefStat();
             }
@@ -358,8 +383,9 @@ public class CreateNewGame extends AppCompatActivity {
 
     private void SaveShopFloor(ShopFloor shop){
         int[] items = new int[10];
+
         for(int a = 0; a < 3; a++) {
-            for (int i = 0; i < 9; i += 3) {
+            for (int i = a*3; i < (a*3)+2; i++) {
                 items[i] = shop.getItem(a).getCost();
                 items[i+1] = shop.getItem(a).getType();
                 items[i+2] = shop.getItem(a).getEval();

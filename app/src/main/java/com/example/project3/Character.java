@@ -28,7 +28,7 @@ public class Character {
         Health = 10;
         Experience = 0;
         atkStat = 1;
-        defStat = 0;
+        defStat = 1;
     }
 
     /**

@@ -28,20 +28,24 @@ public class ShopFloor extends Floors{
         items = genItems(n);
     }
 
-    public ShopFloor(int[] items){
-        Item[] itemArr = new Item[3];
+    public ShopFloor(int[] item, int g){
+        gold = g;
 
         for(int a = 0; a < 3; a++) {
-            for (int i = 0; i < 9; i += 3) {
-                Item it = new Item(items[i], items[i + 1], items[i + 2]);
+            Item it = new Item();
+            for (int i = a*3; i < (a*3)+2; i++) {
+                it.setCost(item[i]);
+                it.setType(item[i+1]);
+                it.setEval(item[i+2]);
+
                 if(it.getType() == 0)
                     it.setName("Sword.exe");
                 else if(it.getType() == 1)
                     it.setName("Shield.exe");
                 else
                     it.setName("Repair Kit");
-                itemArr[a] = it;
             }
+            items[a] = it;
         }
     }
 
@@ -52,6 +56,9 @@ public class ShopFloor extends Floors{
      */
     private Item[] genItems(int fn)
     {
+        if(fn == 0)
+            fn=1;
+
         Item[] retArr = new Item[3];
         int pick;
 

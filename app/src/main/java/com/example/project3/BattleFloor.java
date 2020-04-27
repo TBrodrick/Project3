@@ -34,10 +34,7 @@ public class BattleFloor extends  Floors {
      */
     BattleFloor(int n,Character[] allies){//n is floor number
         super(0,n);
-        if(n%10==0)
-            generateBoss(n);
-        else
-            generateEnemy(n);
+        generateEnemy(n);
 
         Allies = allies;
     }

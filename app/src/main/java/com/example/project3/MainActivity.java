@@ -20,7 +20,7 @@ import com.example.project3.R;
 public class MainActivity extends AppCompatActivity {
     private Character Allies[] = new Character[4];
     int gold;
-    private int floodValue ;
+    private int floodValue;
     private ArrayList<int[]> FloorList;
     private int arrayPos;
     int floodHeight;
@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         init();
     }
 
-    public void init()
-    {
+    public void init() {
         Button newRunButton = (Button) findViewById(R.id.newRun);
         newRunButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,47 +49,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void startNewGame()
-    {
+    public void startNewGame() {
         Intent intent = new Intent(this, CreateNewGame.class);
         startActivity(intent);
     }
-
-    /**
-     * Gives you average party level
-     * @param level of party
-     * @return a new generated Enemy
-     */
-    private Enemy genEnemy(int level){
-        int atk = (int)(Math.random()*3)*(floorNumber/10);
-        int def = (int)(Math.random()*3)*(floorNumber/10);
-        String name = "";
-        int select = (int)Math.random()*4;
-
-        switch (select){
-            case 1:
-                name = "Skeleton";
-                break;
-            case 2:
-                name = "Zombie";
-                break;
-            case 3:
-                name = "Beast";
-                break;
-            case 4:
-                name = "Dave";
-                break;
-        }
-        Enemy enemy = new Enemy(atk, def, name);
-        return enemy;
-    }
-
-    /*private int getLevel(){
-        int total = 0;
-        for(int i = 0; i < 4; i++){
-            total += Allies[i].getLevel();
-        }
-        total /= 4;
-        return total;
-    }*/
 }
