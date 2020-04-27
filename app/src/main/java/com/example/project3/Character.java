@@ -37,10 +37,10 @@ public class Character {
      * @param atk is the attack value
      * @param def is the Defense value
      */
-    public Character(String name, int atk, int def){
+    public Character(String name, int health, int atk, int def){
         Name = name;
-        maxHealth = 10;
-        Health = 10;
+        maxHealth = health;
+        Health = health;
         Experience = 0;
         atkStat = atk;
         defStat = def;
@@ -177,5 +177,7 @@ public class Character {
     {
         atkStat+=(2*defStat*((Math.random()%41)+80)/100)+1;
         defStat = (int) Math.floor(defStat*((Math.random()%41)+80)/100);
+        Health = 3 * atkStat;
+        maxHealth = Health;
     }
 }

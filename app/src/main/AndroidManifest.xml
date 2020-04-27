@@ -10,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".StartPage"
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity"/>
         <activity android:name=".SpecialEvent"
             android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity"/>

@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shop"
-    android:background="@drawable/shop">
+    android:background="@drawable/shop"
+    tools:context=".shop">
 
     <TextView
         android:id="@+id/Transparency"
         android:layout_width="634dp"
         android:layout_height="350dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:background="#99141414"
         android:textColor="#FFFFFF"
+        android:textAlignment="center"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -155,10 +157,10 @@
         android:id="@+id/imageView"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/robota"
         android:layout_marginStart="90dp"
         android:layout_marginTop="25dp"
         android:contentDescription="@string/player1"
+        android:src="@drawable/robota"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Buy1"
         app:srcCompat="@android:mipmap/sym_def_app_icon" />
@@ -167,10 +169,10 @@
         android:id="@+id/imageView2"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/robotb"
         android:layout_marginStart="90dp"
         android:layout_marginTop="25dp"
         android:contentDescription="@string/player2"
+        android:src="@drawable/robotb"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/Buy1"
         app:srcCompat="@android:mipmap/sym_def_app_icon" />
@@ -179,10 +181,10 @@
         android:id="@+id/imageView3"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/robotc"
         android:layout_marginStart="90dp"
         android:layout_marginTop="25dp"
         android:contentDescription="@string/player3"
+        android:src="@drawable/robotc"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/Buy1"
         app:srcCompat="@android:mipmap/sym_def_app_icon" />
@@ -191,10 +193,10 @@
         android:id="@+id/imageView4"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/robotd"
         android:layout_marginStart="90dp"
         android:layout_marginTop="25dp"
         android:contentDescription="@string/player4"
+        android:src="@drawable/robotd"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/Buy1"
         app:srcCompat="@android:mipmap/sym_def_app_icon" />
@@ -211,6 +213,38 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/MoveOn"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:text="Move On"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Shop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/GoBack"
+        android:layout_width="220dp"
+        android:layout_height="55dp"
+        android:text="Go Back"
+        app:layout_constraintEnd_toStartOf="@+id/Shop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/gold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="111dp"
+        android:textColor="#FFFFFF"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toEndOf="@+id/Price3"
+        app:layout_constraintTop_toBottomOf="@+id/MoveOn"
+        app:layout_constraintVertical_bias="0.008" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

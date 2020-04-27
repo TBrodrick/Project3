@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ShopFloor extends Floors{
     //variables
     private Item [] items = new Item[3];
-    private String [] names= {"Scrap","Repair Kit","Sword.exe","Bow.exe","Staff.exe","Axe.exe","Shield.exe","Armor.exe"};
+    //private String [] names= {"Scrap","Repair Kit","Sword.exe","Bow.exe","Staff.exe","Axe.exe","Shield.exe","Armor.exe"};
     private String [] descriptions = {"Replenishes Health", "Increase Attack", "Increase Defence"};
     private int gold;
 
@@ -28,10 +28,27 @@ public class ShopFloor extends Floors{
         items = genItems(n);
     }
 
+    public ShopFloor(int[] items){
+        Item[] itemArr = new Item[3];
+
+        for(int a = 0; a < 3; a++) {
+            for (int i = 0; i < 9; i += 3) {
+                Item it = new Item(items[i], items[i + 1], items[i + 2]);
+                if(it.getType() == 0)
+                    it.setName("Sword.exe");
+                else if(it.getType() == 1)
+                    it.setName("Shield.exe");
+                else
+                    it.setName("Repair Kit");
+                itemArr[a] = it;
+            }
+        }
+    }
+
     /**
      *
      * @param fn floor number
-     * @return array of items avaliable in shop
+     * @return array of items avalible in shop
      */
     private Item[] genItems(int fn)
     {
@@ -68,7 +85,7 @@ public class ShopFloor extends Floors{
     {
         int rand = (int)(Math.random()*4)+2;
 
-        String name  = names[rand];
+        //String name  = names[rand];
 
         String desc = descriptions[1];
         int cost = fn * ((int) (Math.random()*100));
@@ -76,7 +93,7 @@ public class ShopFloor extends Floors{
         int effT = 0;
         int effV = fn * ((int) (Math.random()*20));
 
-        return new Item(name,desc,cost,rarity,effT,effV);
+        return new Item("Sword.exe",desc,cost,rarity,effT,effV);
     }
 
     /**
@@ -88,7 +105,7 @@ public class ShopFloor extends Floors{
     {
         int rand = (int)(Math.random()*2)+6;
 
-        String name  = names[rand];
+        //String name  = names[rand];
 
         String desc = descriptions[2];
         int cost = fn * ((int) (Math.random()*100));
@@ -96,7 +113,7 @@ public class ShopFloor extends Floors{
         int effT = 1;
         int effV = fn * ((int) (Math.random()*20));
 
-        return new Item(name,desc,cost,rarity,effT,effV);
+        return new Item("Shield.exe",desc,cost,rarity,effT,effV);
     }
 
     /**
@@ -108,7 +125,7 @@ public class ShopFloor extends Floors{
     {
         int rand = (int)(Math.random()*2);
 
-        String name  = names[rand];
+        //String name  = names[rand];
 
         String desc = descriptions[0];
         int cost = fn * ((int) (Math.random()*100));
@@ -116,7 +133,7 @@ public class ShopFloor extends Floors{
         int effT = 0;
         int effV = fn * ((int) (Math.random()*50));
 
-        return new Item(name,desc,cost,rarity,effT,effV);
+        return new Item("Repair Kit",desc,cost,rarity,effT,effV);
     }
 
     /**

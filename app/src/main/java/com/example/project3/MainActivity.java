@@ -56,34 +56,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
-
-    /**
-     * Moves the player up or down floors
-     * @param up true if moving upwards, false if going down
-     */
-    private void moveFloor(boolean up){
-        if(up){
-            if(arrayPos == FloorList.size()) {
-                //genFloor();
-                currentFloor++;
-            }
-            arrayPos++;
-        }
-        else{
-            if(currentFloor == floodHeight || arrayPos == 0)
-                gameOver();
-            else{
-                arrayPos--;
-                //gen previous floor
-            }
-        }
-        if(floodValue % 10 > 2){
-            FloorList.remove(0);
-        }
-    }
-
     /**
      * Gives you average party level
      * @param level of party
@@ -121,8 +93,4 @@ public class MainActivity extends AppCompatActivity {
         total /= 4;
         return total;
     }*/
-
-    private void gameOver(){
-
-    }
 }

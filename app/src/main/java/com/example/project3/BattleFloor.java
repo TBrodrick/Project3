@@ -17,6 +17,16 @@ public class BattleFloor extends  Floors {
 
     }
 
+    BattleFloor(Character[] allies, int[] n){
+        Allies = allies;
+        for(int a = 0; a < 4; a++){
+            for (int i = 0; i < 12; i += 3) {
+                Character enemy = new Character("Zombie", n[i], n[i + 1], n[i + 2]);
+                Enemies[a] = enemy;
+            }
+        }
+    }
+
     /**
      *
      * @param n floor number

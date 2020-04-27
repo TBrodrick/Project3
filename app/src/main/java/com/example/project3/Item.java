@@ -23,6 +23,15 @@ public class Item {
         effValue = 0;
     }
 
+    public Item(int c, int et, int ev){
+        name = "Placeholder";
+        description = "Placeholder description.";
+        cost = c;
+        rarity = 1;
+        effType = et;
+        effValue = ev;
+    }
+
     /**
      @param n name
      @param d description
