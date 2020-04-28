@@ -43,19 +43,21 @@ public class BattleFloor extends  Floors {
     {
         for(int i = 0; i<4;i++)         //3 cases
         {
-            if(Allies[i].getHealth()>0&&Enemies[i].getHealth()>0)       //both targets are alive
+            if(Allies[i].getHealth()>0)       //both targets are alive
             {
-                Enemies[i].takeDamage(Allies[i].getAtkStat() - Enemies[i].getDefStat());
-                Allies[i].takeDamage(Enemies[i].getAtkStat() - Allies[i].getDefStat());
-            }
-            else if(Enemies[i].getHealth()<=0)                         //enemy is dead
-            {
-                for(int j = 0;j<4;j++)          //search for alternate enemy (make more efficient)
+                if(Enemies[i].getHealth()>0) {
+                    Enemies[i].takeDamage(Allies[i].getAtkStat() - Enemies[i].getDefStat());
+                    Allies[i].takeDamage(Enemies[i].getAtkStat() - Allies[i].getDefStat());
+                }
+                else if(Enemies[i].getHealth()<=0)                         //enemy is dead
                 {
-                    if(Enemies[j].getHealth()>0)
+                    for(int j = 0;j<4;j++)          //search for alternate enemy (make more efficient)
                     {
-                        Enemies[j].takeDamage(Allies[i].getAtkStat() - Enemies[j].getDefStat());
-                        break;
+                        if(Enemies[j].getHealth()>0)
+                        {
+                            Enemies[j].takeDamage(Allies[i].getAtkStat() - Enemies[j].getDefStat());
+                            break;
+                        }
                     }
                 }
             }

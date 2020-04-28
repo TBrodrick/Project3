@@ -23,7 +23,6 @@ public class CreateNewGame extends AppCompatActivity {
     private ArrayList<int[]> FloorList = new ArrayList<int[]>();
     private int arrayPos = 0;
     int floodHeight;
-    int floorNumber = 0;
     int currentFloor = 0;
 
     private int currentScore;
@@ -65,7 +64,7 @@ public class CreateNewGame extends AppCompatActivity {
         shop.setOnClickListener(new View.OnClickListener() {    //The below two methods will be altered drastically when the code is merged
             @Override
             public void onClick(View v) {
-                openShop(new ShopFloor(floorNumber, gold));
+                openShop(new ShopFloor(currentFloor, gold));
             }
         });
         event.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +176,7 @@ public class CreateNewGame extends AppCompatActivity {
     public void openShop(final ShopFloor Current)
     {
         final ImageView[] Images = new ImageView[3];
-        final Button[] Buttons = new Button[3];
+        final Button[] Buttons = new Button[5];
         final TextView[] Text = new TextView[6];
 
         SaveShopFloor(Current);
@@ -206,6 +205,12 @@ public class CreateNewGame extends AppCompatActivity {
         final Button Buy2 = (Button)findViewById(R.id.Buy2);
         final Button Buy3 = (Button)findViewById(R.id.Buy3);
 
+        Buttons[0] = Buy1;
+        Buttons[1] = Buy2;
+        Buttons[2] = Buy3;
+        Buttons[3] = GoBack;
+        Buttons[4] = MoveOn;
+
         final TextView Item1 = (TextView)findViewById(R.id.Item1);
         final TextView Item2 = (TextView)findViewById(R.id.Item2);
         final TextView Item3 = (TextView)findViewById(R.id.Item3);
@@ -214,9 +219,9 @@ public class CreateNewGame extends AppCompatActivity {
         final TextView Price2 = (TextView)findViewById(R.id.Price2);
         final TextView Price3 = (TextView)findViewById(R.id.Price3);
 
-        Item1.setText(Current.getItem(0).getName());
-        Item2.setText(Current.getItem(1).getName());
-        Item3.setText(Current.getItem(2).getName());
+        Item1.setText(Current.getItem(0).getName() + " +" + Current.getItem(0).getEval());
+        Item2.setText(Current.getItem(1).getName() + " +" + Current.getItem(0).getEval());
+        Item3.setText(Current.getItem(2).getName() + " +" + Current.getItem(0).getEval());
 
         Text[0] = Item1;
         Text[1] = Item2;
@@ -230,7 +235,16 @@ public class CreateNewGame extends AppCompatActivity {
         Price3.setText("Cost: " + Current.getItem(2).getCost());
 
         for(int i = 0; i < 3; i++){
-            if(Text[i].getText().equals("Sword.exe")){
+            if(Current.getItem(i).getCost() == -1){
+                Buttons[i].setVisibility(View.INVISIBLE);
+                Images[i].setVisibility(View.INVISIBLE);
+                Text[i].setVisibility(View.INVISIBLE);
+                Text[i+3].setVisibility(View.INVISIBLE);
+            }
+        }
+
+        for(int i = 0; i < 3; i++){
+            if(Current.getItem(i).getType() == 2){
                 Images[i].setImageResource(R.drawable.weapon);
             }
             else if(Text[i].getText().equals("Axe.exe")){
@@ -248,44 +262,14 @@ public class CreateNewGame extends AppCompatActivity {
             else if(Text[i].getText().equals("Armor.exe")){
                 Images[i].setImageResource(R.drawable.armor);
             }
-            else if(Text[i].getText().equals("Shield.exe")){
+            else if(Current.getItem(i).getType() == 1){
                 Images[i].setImageResource(R.drawable.shield);
             }
-            else if(Text[i].getText().equals("Repair Kit")){
+            else if(Current.getItem(i).getType() == 0){
                 Images[i].setImageResource(R.drawable.health);
             }
         }
 
-        Buy1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Current.buyItems(0, Allies[0]);     //fix
-                Item1Pic.setVisibility(View.INVISIBLE);
-                Buy1.setVisibility(View.INVISIBLE);
-                Item1.setVisibility(View.INVISIBLE);
-                Price1.setVisibility(View.INVISIBLE);
-            }
-        });
-        Buy2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Current.buyItems(1, Allies[0]);     //fix
-                Item2Pic.setVisibility(View.INVISIBLE);
-                Buy2.setVisibility(View.INVISIBLE);
-                Item2.setVisibility(View.INVISIBLE);
-                Price2.setVisibility(View.INVISIBLE);
-            }
-        });
-        Price1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Current.buyItems(2, Allies[0]);        //fix
-                Item3Pic.setVisibility(View.INVISIBLE);
-                Buy3.setVisibility(View.INVISIBLE);
-                Item3.setVisibility(View.INVISIBLE);
-                Price3.setVisibility(View.INVISIBLE);
-            }
-        });
         MoveOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -300,8 +284,82 @@ public class CreateNewGame extends AppCompatActivity {
                 moveFloor(false);
             }
         });
+        Buy1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gold -= Current.getItem(0).getCost();
+                BuyItem(Buttons, Text, Images, 0, Current);
+            }
+        });
+        Buy2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gold -= Current.getItem(1).getCost();
+                BuyItem(Buttons, Text, Images, 1, Current);
+            }
+        });
+        Buy3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gold -= Current.getItem(2).getCost();
+                BuyItem(Buttons, Text, Images, 2, Current);
+            }
+        });
     }
 
+    public void BuyItem(Button[] Buttons, TextView[] Texts, ImageView[] Images, final int index, final ShopFloor Current){
+        for(int i = 0; i < Buttons.length; i++){
+            Buttons[i].setVisibility(View.INVISIBLE);
+        }
+        for(int i = 0; i < Texts.length; i++){
+            Texts[i].setVisibility(View.INVISIBLE);
+        }
+        for(int i = 0; i < Images.length; i++){
+            Images[i].setVisibility(View.INVISIBLE);
+        }
+
+        final ImageView char1 = (ImageView)findViewById(R.id.imageView);
+        final ImageView char2 = (ImageView)findViewById(R.id.imageView2);
+        final ImageView char3 = (ImageView)findViewById(R.id.imageView3);
+        final ImageView char4 = (ImageView)findViewById(R.id.imageView4);
+
+        char1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.buyItems(index, Allies[0]);
+                Current.getItem(index).setCost(-1);
+                SaveShopFloor(Current);
+                openShop(Current);
+            }
+        });
+        char2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.buyItems(index, Allies[0]);
+                Current.getItem(index).setCost(-1);
+                SaveShopFloor(Current);
+                openShop(Current);
+            }
+        });
+        char3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.buyItems(index, Allies[0]);
+                Current.getItem(index).setCost(-1);
+                SaveShopFloor(Current);
+                openShop(Current);
+            }
+        });
+        char4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.buyItems(index, Allies[0]);
+                Current.getItem(index).setCost(-1);
+                SaveShopFloor(Current);
+                openShop(Current);
+            }
+        });
+    }
     public void newEvent()
     {
         setContentView(R.layout.activity_special_event);
@@ -382,7 +440,9 @@ public class CreateNewGame extends AppCompatActivity {
     }
 
     private void SaveShopFloor(ShopFloor shop){
-        int[] items = new int[10];
+        int[] items = new int[13];
+        Toast t = Toast.makeText(getApplicationContext(), ""+shop.getItem(0).getEval(), Toast.LENGTH_SHORT);
+        t.show();
 
         for(int a = 0; a < 3; a++) {
             for (int i = a*3; i < (a*3)+2; i++) {
@@ -404,22 +464,19 @@ public class CreateNewGame extends AppCompatActivity {
      */
     private void genFloor(){
         int select = (int)(Math.random()*9);
-        Toast toast = Toast.makeText(getApplicationContext(), "" + select, Toast.LENGTH_SHORT);
-        toast.show();
-        floorNumber++;
 
-        if(floorNumber % 6 == 0){
+        if(currentFloor % 6 == 0){
             //generates rest floor
         }
         else{
-            if(floorNumber == 9){
+            if(currentFloor == 9){
                 //generate rest floor
             }
             if(select <= 5){
                 startBattle(new BattleFloor(currentFloor, Allies));
             }
             else if(select <= 8){
-                openShop(new ShopFloor(floorNumber, gold));
+                openShop(new ShopFloor(currentFloor, gold));
             }
             else{
                 newEvent();
