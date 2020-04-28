@@ -21,9 +21,9 @@ public class ShopFloor extends Floors{
      * @param n floor number
      * @param g total gold held by player
      */
-    public ShopFloor(int n, int g)
+    public ShopFloor(int n, int g, Character [] c)
     {
-        super(n,1);
+        super(n,1, c);
         gold = g;
         items = genItems(n);
     }
@@ -95,10 +95,11 @@ public class ShopFloor extends Floors{
         //String name  = names[rand];
 
         String desc = descriptions[1];
-        int cost = fn * ((int) (Math.random()*100));
-        int rarity  = fn * ((int) (Math.random()*100));
-        int effT = 0;
-        int effV = fn * ((int) (Math.random()*20));
+
+        int effT = 2;
+        int effV = (int)(1.5* (((Math.random()*41)+80)/100)*(((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
+        int cost = effV * effT*((int) (Math.random()*10)+1)*10;
+        int rarity  = effV*effT+cost;
 
         return new Item("Sword.exe",desc,cost,rarity,effT,effV);
     }
@@ -115,10 +116,11 @@ public class ShopFloor extends Floors{
         //String name  = names[rand];
 
         String desc = descriptions[2];
-        int cost = fn * ((int) (Math.random()*100));
-        int rarity  = fn * ((int) (Math.random()*100));
+
         int effT = 1;
-        int effV = fn * ((int) (Math.random()*20));
+        int effV = (int)(1.5* (((Math.random()*41)+80)/100)*(((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
+        int cost = effV * effT*((int) (Math.random()*10)+1)*10;
+        int rarity  = effV*effT+cost;
 
         return new Item("Shield.exe",desc,cost,rarity,effT,effV);
     }
@@ -135,10 +137,11 @@ public class ShopFloor extends Floors{
         //String name  = names[rand];
 
         String desc = descriptions[0];
-        int cost = fn * ((int) (Math.random()*100));
-        int rarity  = fn * ((int) (Math.random()*100));
+
         int effT = 0;
-        int effV = fn * ((int) (Math.random()*50));
+        int effV = (int)(1.5* (((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
+        int cost = effV * ((int) (Math.random()*10)+1)*10;  //might change * to /
+        int rarity  = effV+cost;
 
         return new Item("Repair Kit",desc,cost,rarity,effT,effV);
     }
@@ -146,15 +149,17 @@ public class ShopFloor extends Floors{
     /**
      *
      * @param index index of item player attempts to buy
-     * @param fn floor number
+     * @param
      * @return tue or false based on success
      */
-    boolean buyItems(int index, int fn)
+    boolean buyItems(int index, Character c)
     {
+
         if(items[index].getCost()>gold)
             return false;
         else {
             gold -= items[index].getCost();
+            c.equipItem(items[index]);
             return true;
         }
     }

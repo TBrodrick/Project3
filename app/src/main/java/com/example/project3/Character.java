@@ -180,4 +180,18 @@ public class Character {
         Health = 3 * atkStat;
         maxHealth = Health;
     }
+
+    void equipItem(Item i)
+    {
+        if(i.getType()==0)
+        {
+            maxHealth+=i.getEval();
+            setHealth(maxHealth);
+            return;
+        }
+        else if(i.getType()==1)
+            defStat+=i.getEval();
+        else
+            atkStat+=i.getEval();
+    }
 }
