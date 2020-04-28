@@ -259,7 +259,7 @@ public class CreateNewGame extends AppCompatActivity {
         Buy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Current.buyItems(0, currentFloor);
+                Current.buyItems(0, Allies[0]);     //fix
                 Item1Pic.setVisibility(View.INVISIBLE);
                 Buy1.setVisibility(View.INVISIBLE);
                 Item1.setVisibility(View.INVISIBLE);
@@ -269,7 +269,7 @@ public class CreateNewGame extends AppCompatActivity {
         Buy2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Current.buyItems(1, currentFloor);
+                Current.buyItems(1, Allies[0]);     //fix
                 Item2Pic.setVisibility(View.INVISIBLE);
                 Buy2.setVisibility(View.INVISIBLE);
                 Item2.setVisibility(View.INVISIBLE);
@@ -279,7 +279,7 @@ public class CreateNewGame extends AppCompatActivity {
         Price1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Current.buyItems(2, currentFloor);
+                Current.buyItems(2, Allies[0]);        //fix
                 Item3Pic.setVisibility(View.INVISIBLE);
                 Buy3.setVisibility(View.INVISIBLE);
                 Item3.setVisibility(View.INVISIBLE);

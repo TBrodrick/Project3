@@ -21,9 +21,9 @@ public class ShopFloor extends Floors{
      * @param n floor number
      * @param g total gold held by player
      */
-    public ShopFloor(int n, int g, Character [] c)
+    public ShopFloor(int n, int g)
     {
-        super(n,1, c);
+        super(n,1);
         gold = g;
         items = genItems(n);
     }
@@ -97,7 +97,7 @@ public class ShopFloor extends Floors{
         String desc = descriptions[1];
 
         int effT = 2;
-        int effV = (int)(1.5* (((Math.random()*41)+80)/100)*(((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
+        int effV = (int) Math.ceil(1.5* (((Math.random()*41)+80)/100)*(((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
         int cost = effV * effT*((int) (Math.random()*10)+1)*10;
         int rarity  = effV*effT+cost;
 
@@ -118,7 +118,7 @@ public class ShopFloor extends Floors{
         String desc = descriptions[2];
 
         int effT = 1;
-        int effV = (int)(1.5* (((Math.random()*41)+80)/100)*(((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
+        int effV = (int) Math.ceil(1.5* (((Math.random()*41)+80)/100)*(((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
         int cost = effV * effT*((int) (Math.random()*10)+1)*10;
         int rarity  = effV*effT+cost;
 
@@ -139,7 +139,7 @@ public class ShopFloor extends Floors{
         String desc = descriptions[0];
 
         int effT = 0;
-        int effV = (int)(1.5* (((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
+        int effV = (int) Math.ceil(1.5* (((Math.random()*5)+1)*(fn/((Math.random()*fn)+1))));
         int cost = effV * ((int) (Math.random()*10)+1)*10;  //might change * to /
         int rarity  = effV+cost;
 
