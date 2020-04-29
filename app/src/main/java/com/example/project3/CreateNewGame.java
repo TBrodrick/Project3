@@ -25,6 +25,8 @@ public class CreateNewGame extends AppCompatActivity {
     int floodHeight = -1;
     int floodValue = 0;
     int currentFloor = 0;
+    String userName;
+    String password;
     Bundle instanceState;
 
     private int currentScore = 0;
@@ -40,18 +42,33 @@ public class CreateNewGame extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         instanceState = savedInstanceState;
-        setContentView(R.layout.start_page);
-        final Button Skip = (Button) findViewById(R.id.Skip);
-        final TextView intro = (TextView) findViewById(R.id.Introduction);
-        intro.setText("You are a group of robots escaping a world that is flooding." +
-                        "You find a tower full of fish who are embracing the new world order." +
-                        "They will attempt to fight or help you on your way up the tower.\n Buy items in shops, rest when you can, and survive the ambushes on your way to safety");
-        Skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openShop(new ShopFloor(currentFloor, gold));
-            }
-        });
+        Intent intent = getIntent();
+        if(intent.getBooleanExtra("Continue", false)){
+            userName = intent.getStringExtra("Username");
+            password = intent.getStringExtra("password");
+            loadGame(userName, password);
+        }
+        else {
+            setContentView(R.layout.start_page);
+            final Button Skip = (Button) findViewById(R.id.Skip);
+            final TextView intro = (TextView) findViewById(R.id.Introduction);
+            intro.setText("You are a group of robots escaping a world that is flooding." +
+                    "You find a tower full of fish who are embracing the new world order." +
+                    "They will attempt to fight or help you on your way up the tower.\n Buy items in shops, rest when you can, and survive the ambushes on your way to safety");
+            Skip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openShop(new ShopFloor(currentFloor, gold));
+                }
+            });
+        }
+    }
+
+    public void saveGame(){
+
+    }
+
+    public void loadGame(String userName, String password){
 
     }
 
@@ -64,6 +81,7 @@ public class CreateNewGame extends AppCompatActivity {
         final Button flee = (Button) findViewById(R.id.Flee);
         final Button attack = (Button) findViewById(R.id.Attack);
         final TextView title = (TextView)findViewById(R.id.battleTitle);
+        final Button save = (Button)findViewById(R.id.saveGame);
         title.setText("Ambush!");
 
         //Defines the battle taking place
@@ -167,6 +185,7 @@ public class CreateNewGame extends AppCompatActivity {
                     flee.setVisibility(View.INVISIBLE);
                     MoveOn.setVisibility(View.VISIBLE);
                     GoBack.setVisibility(View.VISIBLE);
+                    save.setVisibility(View.VISIBLE);
                     MoveOn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -179,6 +198,12 @@ public class CreateNewGame extends AppCompatActivity {
                         public void onClick(View v) {
                             SaveBattleFloor(Current);
                             moveFloor(false);
+                        }
+                    });
+                    save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            saveGame();
                         }
                     });
                 }
