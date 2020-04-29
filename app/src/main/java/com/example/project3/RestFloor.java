@@ -2,6 +2,7 @@ package com.example.project3;
 
 public class RestFloor extends Floors {
 
+    private Character[] a = new Character[4];
     //default Constructor
     RestFloor(){
         super(0,4);
@@ -11,19 +12,18 @@ public class RestFloor extends Floors {
 
     /**
      *
-     * @param n floor number
-     * @param a array of allies
+     * @param allies array of allies
      */
-    RestFloor(int n, Ally[] a)
+    RestFloor(Character[] allies)
     {
-        super(n,4,a);
+        a = allies;
     }
 
     /**
      *
-     * @param a an array of allies
+     * Heals the party
      */
-    void rest(Ally[] a)
+    void rest()
     {
         for(int i = 0; i< 4; i++){
             a[i].setHealth(a[i].getMaxHealth());      //change to set health max

@@ -18,18 +18,6 @@ import com.example.project3.R;
 
 
 public class MainActivity extends AppCompatActivity {
-    private Character Allies[] = new Character[4];
-    int gold;
-    private int floodValue;
-    private ArrayList<int[]> FloorList;
-    private int arrayPos;
-    int floodHeight;
-    int floorNumber;
-    int currentFloor;
-
-    private int currentScore;
-    private int highScore;
-
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override

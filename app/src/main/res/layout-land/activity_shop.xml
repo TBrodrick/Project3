@@ -13,9 +13,9 @@
         android:layout_height="350dp"
         android:layout_marginTop="16dp"
         android:background="#99141414"
-        android:textColor="#FFFFFF"
-        android:textAlignment="center"
         android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -236,15 +236,12 @@
         android:id="@+id/gold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="111dp"
-        android:textColor="#FFFFFF"
+        android:layout_marginTop="24dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toEndOf="@+id/Price3"
-        app:layout_constraintTop_toBottomOf="@+id/MoveOn"
-        app:layout_constraintVertical_bias="0.008" />
+        app:layout_constraintStart_toEndOf="@+id/Item3Pic"
+        app:layout_constraintTop_toBottomOf="@+id/MoveOn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

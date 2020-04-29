@@ -1,5 +1,6 @@
 package com.example.project3;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -18,17 +19,17 @@ import java.util.ArrayList;
 
 public class CreateNewGame extends AppCompatActivity {
     private Character Allies[] = new Character[4];
-    int gold = 10000;
-    private int floodValue;
+    int gold = 1000;
     private ArrayList<int[]> FloorList = new ArrayList<int[]>();
     private int arrayPos = 0;
-    int floodHeight;
+    int floodHeight = -1;
+    int floodValue = 0;
     int currentFloor = 0;
+    Bundle instanceState;
 
-    private int currentScore;
-    private int highScore;
+    private int currentScore = 0;
+    private int HighScore = 0;
 
-    int loop = 0;
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +39,13 @@ public class CreateNewGame extends AppCompatActivity {
         Allies[3] = new Character("Dave");
 
         super.onCreate(savedInstanceState);
+        instanceState = savedInstanceState;
         setContentView(R.layout.start_page);
         final Button Skip = (Button) findViewById(R.id.Skip);
-        final Button Next = (Button) findViewById(R.id.Next);
         final TextView intro = (TextView) findViewById(R.id.Introduction);
+        intro.setText("You are a group of robots escaping a world that is flooding." +
+                        "You find a tower full of fish who are embracing the new world order." +
+                        "They will attempt to fight or help you on your way up the tower.\n Buy items in shops, rest when you can, and survive the ambushes on your way to safety");
         Skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,20 +63,9 @@ public class CreateNewGame extends AppCompatActivity {
         final Button GoBack = (Button)findViewById(R.id.GoBack);
         final Button flee = (Button) findViewById(R.id.Flee);
         final Button attack = (Button) findViewById(R.id.Attack);
-        final Button shop = (Button) findViewById(R.id.ShopTest);
-        final Button event = (Button) findViewById(R.id.EventTest);
-        shop.setOnClickListener(new View.OnClickListener() {    //The below two methods will be altered drastically when the code is merged
-            @Override
-            public void onClick(View v) {
-                openShop(new ShopFloor(currentFloor, gold));
-            }
-        });
-        event.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newEvent();
-            }
-        });
+        final TextView title = (TextView)findViewById(R.id.battleTitle);
+        title.setText("Ambush!");
+
         //Defines the battle taking place
         SaveBattleFloor(Current);
 
@@ -122,6 +115,28 @@ public class CreateNewGame extends AppCompatActivity {
         E3Health.setText(Current.getEnemy(2).getHealth() + " / " + Current.getEnemy(2).getMaxHealth());
         E4Health.setText(Current.getEnemy(3).getHealth() + " / " + Current.getEnemy(3).getMaxHealth());
 
+        if(Current.getEnemy(0).getHealth() <= 0 && Current.getEnemy(1).getHealth() <= 0 && Current.getEnemy(2).getHealth() <= 0 && Current.getEnemy(3).getHealth() <= 0){
+            attack.setVisibility(View.INVISIBLE);
+            flee.setVisibility(View.INVISIBLE);
+            MoveOn.setVisibility(View.VISIBLE);
+            GoBack.setVisibility(View.VISIBLE);
+            title.setText("Victory!");
+            MoveOn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SaveBattleFloor(Current);
+                    moveFloor(true);
+                }
+            });
+            GoBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SaveBattleFloor(Current);
+                    moveFloor(false);
+                }
+            });
+        }
+
         attack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,9 +155,14 @@ public class CreateNewGame extends AppCompatActivity {
                 E4Health.setText(Current.getEnemy(3).getHealth() + " / " + Current.getEnemy(3).getMaxHealth());
 
                 if(Allies[0].getHealth() <= 0 && Allies[1].getHealth() <= 0 && Allies[2].getHealth() <= 0 && Allies[3].getHealth() <= 0){
-                    //game over
+                    gameOver();
                 }
                 else if(Current.getEnemy(0).getHealth() <= 0 && Current.getEnemy(1).getHealth() <= 0 && Current.getEnemy(2).getHealth() <= 0 && Current.getEnemy(3).getHealth() <= 0){
+                    for(int i = 0; i < Allies.length; i++){
+                        if(Allies[i].getHealth() > 0)
+                            currentScore++;
+                    }
+                    title.setText("Victory!");
                     attack.setVisibility(View.INVISIBLE);
                     flee.setVisibility(View.INVISIBLE);
                     MoveOn.setVisibility(View.VISIBLE);
@@ -150,12 +170,14 @@ public class CreateNewGame extends AppCompatActivity {
                     MoveOn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SaveBattleFloor(Current);
                             moveFloor(true);
                         }
                     });
                     GoBack.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            SaveBattleFloor(Current);
                             moveFloor(false);
                         }
                     });
@@ -163,11 +185,9 @@ public class CreateNewGame extends AppCompatActivity {
 
             }
         });
-        final Toast toast = Toast.makeText(getApplicationContext(), "Press", Toast.LENGTH_SHORT);
         flee.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //toast.show();
                 moveFloor(false);
             }
         });
@@ -188,6 +208,8 @@ public class CreateNewGame extends AppCompatActivity {
         //Non Item Related TextViews
         final TextView Gold = (TextView)findViewById(R.id.gold);
         final TextView BackBox = (TextView)findViewById(R.id.Transparency);
+        BackBox.setText("");
+
         Gold.setText("Gold: " + gold);
 
         //Setup Items
@@ -200,6 +222,9 @@ public class CreateNewGame extends AppCompatActivity {
 
         final Button MoveOn = (Button)findViewById(R.id.MoveOn);
         final Button GoBack = (Button)findViewById(R.id.GoBack);
+
+        if(currentFloor == 0)
+            GoBack.setVisibility(View.INVISIBLE);
 
         final Button Buy1 = (Button)findViewById(R.id.Buy1);
         final Button Buy2 = (Button)findViewById(R.id.Buy2);
@@ -219,9 +244,9 @@ public class CreateNewGame extends AppCompatActivity {
         final TextView Price2 = (TextView)findViewById(R.id.Price2);
         final TextView Price3 = (TextView)findViewById(R.id.Price3);
 
-        Item1.setText(Current.getItem(0).getName() + " +" + Current.getItem(0).getEval());
-        Item2.setText(Current.getItem(1).getName() + " +" + Current.getItem(0).getEval());
-        Item3.setText(Current.getItem(2).getName() + " +" + Current.getItem(0).getEval());
+        Item1.setText(Current.getItem(0).getName());
+        Item2.setText(Current.getItem(1).getName());
+        Item3.setText(Current.getItem(2).getName());
 
         Text[0] = Item1;
         Text[1] = Item2;
@@ -287,27 +312,36 @@ public class CreateNewGame extends AppCompatActivity {
         Buy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gold -= Current.getItem(0).getCost();
-                BuyItem(Buttons, Text, Images, 0, Current);
+                if(gold >= Current.getItem(0).getCost()) {
+                    gold -= Current.getItem(0).getCost();
+                    BuyItem(Buttons, Text, Images, 0, Current);
+                }
             }
         });
         Buy2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gold -= Current.getItem(1).getCost();
-                BuyItem(Buttons, Text, Images, 1, Current);
+                if(gold >= Current.getItem(1).getCost()) {
+                    gold -= Current.getItem(1).getCost();
+                    BuyItem(Buttons, Text, Images, 1, Current);
+                }
             }
         });
         Buy3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gold -= Current.getItem(2).getCost();
-                BuyItem(Buttons, Text, Images, 2, Current);
+                if(gold >= Current.getItem(2).getCost()) {
+                    gold -= Current.getItem(2).getCost();
+                    BuyItem(Buttons, Text, Images, 2, Current);
+                }
             }
         });
     }
 
     public void BuyItem(Button[] Buttons, TextView[] Texts, ImageView[] Images, final int index, final ShopFloor Current){
+        final TextView back = (TextView)findViewById(R.id.Transparency);
+        back.setText("Click the bot you wish to give the item to.");
+
         for(int i = 0; i < Buttons.length; i++){
             Buttons[i].setVisibility(View.INVISIBLE);
         }
@@ -335,7 +369,7 @@ public class CreateNewGame extends AppCompatActivity {
         char2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Current.buyItems(index, Allies[0]);
+                Current.buyItems(index, Allies[1]);
                 Current.getItem(index).setCost(-1);
                 SaveShopFloor(Current);
                 openShop(Current);
@@ -344,7 +378,7 @@ public class CreateNewGame extends AppCompatActivity {
         char3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Current.buyItems(index, Allies[0]);
+                Current.buyItems(index, Allies[2]);
                 Current.getItem(index).setCost(-1);
                 SaveShopFloor(Current);
                 openShop(Current);
@@ -353,26 +387,101 @@ public class CreateNewGame extends AppCompatActivity {
         char4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Current.buyItems(index, Allies[0]);
+                Current.buyItems(index, Allies[3]);
                 Current.getItem(index).setCost(-1);
                 SaveShopFloor(Current);
                 openShop(Current);
             }
         });
     }
-    public void newEvent()
+    public void newEvent(EventFloor event)
     {
+        final EventFloor Current = event;
         setContentView(R.layout.activity_special_event);
+        final Button goBack = (Button)findViewById(R.id.Choice1);
+        final Button goForward = (Button)findViewById(R.id.Choice3);
+        final Button mine = (Button)findViewById(R.id.Choice2);
+        final TextView untilFlood = (TextView)findViewById(R.id.untilFlood);
+        untilFlood.setText("Floors until flood: " + (currentFloor - floodHeight));
+        final int[] floor = new int[13];
+        floor[floor.length - 1] = 2;
+        if(arrayPos == FloorList.size())
+            FloorList.add(floor);
+
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveFloor(false);
+            }
+        });
+        goForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveFloor(true);
+            }
+        });
+        mine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floodHeight++;
+                if(floodHeight >= currentFloor)
+                    gameOver();
+                untilFlood.setText("Floors until flood: " + (currentFloor - floodHeight));
+                gold += Current.mine();
+            }
+        });
     }
 
     public void restFloor()
     {
-        setContentView(R.layout.start_page);
+        final RestFloor Current = new RestFloor(Allies);
+        setContentView(R.layout.activity_rest);
+        Button moveOn = (Button)findViewById(R.id.Continue);
+        Button goBack = (Button)findViewById(R.id.Back);
+        Button rest = (Button)findViewById(R.id.Rest);
+        final int[] floor = new int[13];
+        floor[floor.length - 1] = 2;
+        if(arrayPos == FloorList.size())
+            FloorList.add(floor);
+
+        moveOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveFloor(true);
+            }
+        });
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveFloor(false);
+
+            }
+        });
+        rest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Current.rest();
+            }
+        });
     }
 
     private void gameOver(){
-        Toast toast = Toast.makeText(getApplicationContext(), "Game Over", Toast.LENGTH_SHORT);
-        toast.show();
+        setContentView(R.layout.activity_game_over);
+        final Button restart = (Button)findViewById(R.id.Restart);
+        final TextView score = (TextView)findViewById(R.id.score);
+        final TextView highScore = (TextView)findViewById(R.id.highScore);
+
+        HighScore += 10;
+
+        score.setText("Your Score: " + currentScore);
+        highScore.setText("High Score: " + HighScore);
+        restart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -381,37 +490,41 @@ public class CreateNewGame extends AppCompatActivity {
      */
     private void moveFloor(boolean up){
         if(up){
+            currentFloor++;
             arrayPos++;
-            if(arrayPos == FloorList.size() ) {
+            if(arrayPos >= FloorList.size()) {
                 genFloor();
-                currentFloor++;
             }
             else{
-                currentFloor++;
                 if(FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 0)
                     startBattle(new BattleFloor(Allies, FloorList.get(arrayPos)));
                 else if(FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 1)
                     openShop(new ShopFloor(FloorList.get(arrayPos), gold));
+                else if(FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 2)
+                    newEvent(new EventFloor());
             }
         }
         else {
             if (currentFloor != 0) {
-                if (currentFloor == floodHeight || arrayPos == 0)
+                arrayPos--;
+                currentFloor--;
+                if (currentFloor <= floodHeight || arrayPos == -1) {
                     gameOver();
-
+                }
                 else {
-                    arrayPos--;
-                    currentFloor--;
                     if (FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 0)
                         startBattle(new BattleFloor(Allies, FloorList.get(arrayPos)));
                     else if (FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 1)
                         openShop(new ShopFloor(FloorList.get(arrayPos), gold));
+                    else if(FloorList.get(arrayPos)[FloorList.get(arrayPos).length - 1] == 2)
+                        newEvent(new EventFloor());
                 }
             }
         }
         if(floodValue % 10 > 2){
-            FloorList.remove(0);
+            floodHeight++;
         }
+        floodValue++;
     }
 
     /**
@@ -433,7 +546,7 @@ public class CreateNewGame extends AppCompatActivity {
         }
         enemies[enemies.length - 1] = 0;
 
-        if(arrayPos == FloorList.size())
+        if(arrayPos >= FloorList.size())
             FloorList.add(enemies);
         else
             FloorList.set(arrayPos, enemies);
@@ -441,16 +554,14 @@ public class CreateNewGame extends AppCompatActivity {
 
     private void SaveShopFloor(ShopFloor shop){
         int[] items = new int[13];
-        Toast t = Toast.makeText(getApplicationContext(), ""+shop.getItem(0).getEval(), Toast.LENGTH_SHORT);
-        t.show();
 
         for(int a = 0; a < 3; a++) {
-            for (int i = a*3; i < (a*3)+2; i++) {
+                int i = a*3;
                 items[i] = shop.getItem(a).getCost();
-                items[i+1] = shop.getItem(a).getType();
-                items[i+2] = shop.getItem(a).getEval();
-            }
+                items[(i+1)] = shop.getItem(a).getType();
+                items[(i+2)] = shop.getItem(a).getEval();
         }
+
         items[items.length - 1] = 1;
         if(arrayPos == FloorList.size() || FloorList.size() == 0)
             FloorList.add(items);
@@ -466,20 +577,17 @@ public class CreateNewGame extends AppCompatActivity {
         int select = (int)(Math.random()*9);
 
         if(currentFloor % 6 == 0){
-            //generates rest floor
+            restFloor();
         }
         else{
-            if(currentFloor == 9){
-                //generate rest floor
-            }
             if(select <= 5){
                 startBattle(new BattleFloor(currentFloor, Allies));
             }
-            else if(select <= 8){
+            else if(select <= 7){
                 openShop(new ShopFloor(currentFloor, gold));
             }
             else{
-                newEvent();
+                newEvent(new EventFloor());
             }
         }
     }

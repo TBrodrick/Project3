@@ -3,27 +3,26 @@ import java.util.Random;
 import java.math.*;
 public class EventFloor extends Floors {
     //variables
-
+    int numMines;
     //functions
     //default constructor
-    EventFloor()
+    public EventFloor()
     {
         super(0,3);
+        numMines = (int)(Math.random()*3)+1;
+    }
+    public EventFloor(int num){
+        super(0,3);
+        numMines = num;
     }
 
-    //constructor
-    EventFloor(int n, Ally[] a)
-    {
-        super(n,3,a);
+    public int getNumMines(){
+        return numMines;
     }
-
-    //alternative constructor
-    EventFloor(int n)
-    {
-        super(n,3);
-    }
-
-    int mine() {
-        return (int)(Math.random() * 50) + 50;
+    public int mine() {
+        if(numMines > 0)
+            return (int)(Math.random() * 50) + 50;
+        numMines--;
+        return 0;
     }
 }

@@ -35,10 +35,16 @@
     <string name="hp">HP</string>
     <string name="floor">Floor</string>
     <string name="event_name">Event Name</string>
-    <string name="event_explanation">Event Explanation</string>
+    <string name="event_explanation">You come across a room full of scattered coins. You can stop to collect the coins, but each time you do the flood will advance</string>
     <string name="choice1">Choice1</string>
     <string name="choice2">Choice2</string>
     <string name="choice3">Choice3</string>
+    <string name="rest">Rest</string>
+    <string name="go_back">Go Back</string>
+    <string name="continue_on">Continue On</string>
+    <string name="as_you_move_you_notice_that_this_floor_doesn_t_seem_to_contain_any_enemies_how_will_you_proceed">There appears to be nothing here how will you proceed?</string>
+    <string name="game_over">Game Over</string>
+    <string name="restart">Restart?</string>
 
 
 </resources>

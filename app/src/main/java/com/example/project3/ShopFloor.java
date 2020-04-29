@@ -33,18 +33,18 @@ public class ShopFloor extends Floors{
 
         for(int a = 0; a < 3; a++) {
             Item it = new Item();
-            for (int i = a*3; i < (a*3)+2; i++) {
-                it.setCost(item[i]);
-                it.setType(item[i+1]);
-                it.setEval(item[i+2]);
+            int i = a*3;
 
-                if(it.getType() == 0)
-                    it.setName("Sword.exe");
-                else if(it.getType() == 1)
-                    it.setName("Shield.exe");
-                else
-                    it.setName("Repair Kit");
-            }
+            it.setCost(item[i]);
+            it.setType(item[(i+1)]);
+            it.setEval(item[(i+2)]);
+
+            if(it.getType() == 0)
+                it.setName("Repair Kit +"+ it.getEval());
+            else if(it.getType() == 1)
+                it.setName("Shield.exe +"+ it.getEval());
+            else
+                    it.setName("Sworrd.exe +"+ it.getEval());
             items[a] = it;
         }
     }
@@ -101,7 +101,7 @@ public class ShopFloor extends Floors{
         int cost = effV * effT*((int) (Math.random()*10)+1)*10;
         int rarity  = effV*effT+cost;
 
-        return new Item("Sword.exe",desc,cost,rarity,effT,effV);
+        return new Item("Sword.exe +"+ effV,desc,cost,rarity,effT,effV);
     }
 
     /**
@@ -122,7 +122,7 @@ public class ShopFloor extends Floors{
         int cost = effV * effT*((int) (Math.random()*10)+1)*10;
         int rarity  = effV*effT+cost;
 
-        return new Item("Shield.exe",desc,cost,rarity,effT,effV);
+        return new Item("Shield.exe +"+ effV,desc,cost,rarity,effT,effV);
     }
 
     /**
@@ -143,7 +143,7 @@ public class ShopFloor extends Floors{
         int cost = effV * ((int) (Math.random()*10)+1)*10;  //might change * to /
         int rarity  = effV+cost;
 
-        return new Item("Repair Kit",desc,cost,rarity,effT,effV);
+        return new Item("Repair Kit +"+ effV,desc,cost,rarity,effT,effV);
     }
 
     /**
