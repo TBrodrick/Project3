@@ -15,9 +15,15 @@ import android.widget.Toast;
 
 import com.example.project3.R;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CreateNewGame extends AppCompatActivity {
+    private static final String conString = "jdbc:oracle:thin:mcs1009/cMEY1Myo@adcsdb01.csueastbay.edu:1521/mcspdb.ad.csueastbay.edu";
     private Character Allies[] = new Character[4];
     int gold = 1000;
     private ArrayList<int[]> FloorList = new ArrayList<int[]>();
@@ -43,10 +49,16 @@ public class CreateNewGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         instanceState = savedInstanceState;
         Intent intent = getIntent();
-        if(intent.getBooleanExtra("Continue", false)){
+        if(intent.getBooleanExtra("Continue", false)) {
             userName = intent.getStringExtra("Username");
             password = intent.getStringExtra("password");
-            loadGame(userName, password);
+            try {
+                loadGame(userName, password);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         else {
             setContentView(R.layout.start_page);
@@ -64,12 +76,82 @@ public class CreateNewGame extends AppCompatActivity {
         }
     }
 
-    public void saveGame(){
+    public void saveGame(String playerID, String password) throws SQLException, ClassNotFoundException
+    {
+        Class.forName ("oracle.jdbc.OracleDriver");
+        Connection conn = DriverManager.getConnection(conString);
+        Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
+        stmt.executeQuery("DELETE * FROM FLOODBOTSFLOORS WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
+        int rows = FloorList.size();
+        for(int i = 0; i < rows; i++)
+        {
+            String entryString1 = "'" + playerID + "','" + password + "', " + i + "," + FloorList.get(i)[12] + "," + FloorList.get(i)[0] + "," + FloorList.get(i)[1] + "," + FloorList.get(i)[2] + "," + FloorList.get(i)[3] + "," + FloorList.get(i)[4] + "," + FloorList.get(i)[5] + "," + FloorList.get(i)[6] + "," + FloorList.get(i)[7] + "," + FloorList.get(i)[8] + "," + FloorList.get(i)[9] + "," + FloorList.get(i)[10] + "," + FloorList.get(i)[11];
+            String entryString2 = "INSERT INTO FLOODBOTSFLOORS VALUES(" + entryString1 + ")";
+            stmt.executeUpdate(entryString2);
+        }
+
+        stmt.executeQuery("DELETE * FROM FLOODBOTSCHARACTERS WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
+        for(int i = 0; i < 4; i++)
+        {
+            String entryString1 = "'" + playerID + "','" + password + "', " + i + "," + Allies[i].getName() + "," + Allies[i].getMaxHealth() + "," + Allies[i].getHealth() + ',' + Allies[i].getAtkStat() + "," + Allies[i].getDefStat();
+            String entryString2 = "INSERT INTO FLOODBOTSCHARACTERS VALUES(" + entryString1 + ")";
+            stmt.executeUpdate(entryString2);
+        }
+
+        stmt.executeQuery("DELETE * FROM FLOODBOTSGENERAL WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
+        stmt.executeQuery("INSERT INTO FLOODBOTSGENERAL VALUES('" + playerID + "','" + password + "', " + HighScore + "," + currentScore + "," + currentFloor + "," + arrayPos + "," + floodHeight + "," + gold + "," + floodValue + ")");
+
+        stmt.close();
+        conn.close();
     }
 
-    public void loadGame(String userName, String password){
+    public void loadGame(String playerID, String password) throws SQLException, ClassNotFoundException
+    {
+        Class.forName ("oracle.jdbc.OracleDriver");
+        Connection conn = DriverManager.getConnection(conString);
+        Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        ResultSet rset = stmt.executeQuery("SELECT * FROM FLOODBOTSFLOORS WHERE PlayerID='" + playerID + "' AND Password='" + password + "' ORDER BY ArraySlot");
+        int rows = 0;
+        if (rset.last()) {
+            rows = rset.getRow();
+            rset.beforeFirst();
+        }
+        FloorList.clear();
+        for(int i = 0; i < rows; i++)
+        {
+            rset.next();
+            int[] temp = { rset.getInt(4), rset.getInt(5), rset.getInt(6), rset.getInt(7), rset.getInt(8), rset.getInt(9), rset.getInt(10), rset.getInt(11), rset.getInt(12), rset.getInt(13), rset.getInt(14), rset.getInt(15), rset.getInt(3) };
+            FloorList.add(temp);
+        }
+        rset.close();
 
+        ResultSet rset2 = stmt.executeQuery("SELECT * FROM FLOODBOTSCHARACTERS WHERE PlayerID='" + playerID + "' AND Password='" + password + "' ORDER BY ArraySlot");
+        Character[] loading = new Character[4];
+        for(int i = 0; i < 4; i++)
+        {
+            rset2.next();
+            loading[i].setName(rset2.getString(3));
+            loading[i].setMaxHealth(rset2.getInt(4));
+            loading[i].setHealth(rset2.getInt(5));
+            loading[i].setAtkStat(rset2.getInt(6));
+            loading[i].setDefStat(rset2.getInt(7));
+        }
+        rset2.close();
+        Allies = loading;
+
+        ResultSet rset3 = stmt.executeQuery("SELECT * FROM FLOODBOTSGENERAL WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
+        HighScore = rset3.getInt(2);
+        currentScore = rset3.getInt(3);
+        currentFloor = rset3.getInt(4);
+        arrayPos =rset3.getInt(5);
+        floodHeight = rset3.getInt(6);
+        gold = rset3.getInt(7);
+        floodValue = rset3.getInt(8);
+        rset3.close();
+
+        stmt.close();
+        conn.close();
     }
 
 
@@ -81,7 +163,6 @@ public class CreateNewGame extends AppCompatActivity {
         final Button flee = (Button) findViewById(R.id.Flee);
         final Button attack = (Button) findViewById(R.id.Attack);
         final TextView title = (TextView)findViewById(R.id.battleTitle);
-        final Button save = (Button)findViewById(R.id.saveGame);
         title.setText("Ambush!");
 
         //Defines the battle taking place
@@ -143,14 +224,26 @@ public class CreateNewGame extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     SaveBattleFloor(Current);
-                    moveFloor(true);
+                    try {
+                        moveFloor(true);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             GoBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     SaveBattleFloor(Current);
-                    moveFloor(false);
+                    try {
+                        moveFloor(false);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -185,25 +278,30 @@ public class CreateNewGame extends AppCompatActivity {
                     flee.setVisibility(View.INVISIBLE);
                     MoveOn.setVisibility(View.VISIBLE);
                     GoBack.setVisibility(View.VISIBLE);
-                    save.setVisibility(View.VISIBLE);
                     MoveOn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             SaveBattleFloor(Current);
-                            moveFloor(true);
+                            try {
+                                moveFloor(true);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                     GoBack.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             SaveBattleFloor(Current);
-                            moveFloor(false);
-                        }
-                    });
-                    save.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            saveGame();
+                            try {
+                                moveFloor(false);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 }
@@ -213,7 +311,13 @@ public class CreateNewGame extends AppCompatActivity {
         flee.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                moveFloor(false);
+                try {
+                    moveFloor(false);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -324,14 +428,26 @@ public class CreateNewGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SaveShopFloor(Current);
-                moveFloor(true);
+                try {
+                    moveFloor(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         GoBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SaveShopFloor(Current);
-                moveFloor(false);
+                try {
+                    moveFloor(false);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         Buy1.setOnClickListener(new View.OnClickListener() {
@@ -436,13 +552,25 @@ public class CreateNewGame extends AppCompatActivity {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveFloor(false);
+                try {
+                    moveFloor(false);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         goForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveFloor(true);
+                try {
+                    moveFloor(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         mine.setOnClickListener(new View.OnClickListener() {
@@ -472,13 +600,25 @@ public class CreateNewGame extends AppCompatActivity {
         moveOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveFloor(true);
+                try {
+                    moveFloor(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveFloor(false);
+                try {
+                    moveFloor(false);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -513,7 +653,8 @@ public class CreateNewGame extends AppCompatActivity {
      * Moves the player up or down floors
      * @param up true if moving upwards, false if going down
      */
-    private void moveFloor(boolean up){
+    private void moveFloor(boolean up) throws SQLException, ClassNotFoundException {
+        saveGame(userName, password);
         if(up){
             currentFloor++;
             arrayPos++;

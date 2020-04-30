@@ -45,6 +45,7 @@
     <string name="as_you_move_you_notice_that_this_floor_doesn_t_seem_to_contain_any_enemies_how_will_you_proceed">There appears to be nothing here how will you proceed?</string>
     <string name="game_over">Game Over</string>
     <string name="restart">Restart?</string>
+    <string name="mine">Mine</string>
 
 
 </resources>
