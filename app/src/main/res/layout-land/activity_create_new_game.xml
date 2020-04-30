@@ -128,8 +128,9 @@
 
     <ImageView
         android:id="@+id/Enemy1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/enemy"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="80dp"
         android:contentDescription="@string/enemy1"
@@ -139,8 +140,9 @@
 
     <ImageView
         android:id="@+id/Enemy2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/enemy"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="75dp"
         android:contentDescription="@string/enemy2"
@@ -150,8 +152,9 @@
 
     <ImageView
         android:id="@+id/Enemy3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/enemy"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="75dp"
         android:contentDescription="@string/enemy3"
@@ -161,8 +164,9 @@
 
     <ImageView
         android:id="@+id/Enemy4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/enemy"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="75dp"
         android:contentDescription="@string/enemy4"

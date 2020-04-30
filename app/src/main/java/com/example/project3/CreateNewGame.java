@@ -1,5 +1,6 @@
 package com.example.project3;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.project3.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,9 +29,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CreateNewGame extends AppCompatActivity {
-    private static final String conString = "jdbc:oracle:thin:mcs1009/cMEY1Myo@adcsdb01.csueastbay.edu:1521/mcspdb.ad.csueastbay.edu";
+    //private static final String conString = "jdbc:oracle:thin:mcs1009/cMEY1Myo@adcsdb01.csueastbay.edu:1521/mcspdb.ad.csueastbay.edu";
     private Character Allies[] = new Character[4];
     int gold = 1000;
     private ArrayList<int[]> FloorList = new ArrayList<int[]>();
@@ -32,11 +43,12 @@ public class CreateNewGame extends AppCompatActivity {
     int floodValue = 0;
     int currentFloor = 0;
     String userName;
-    String password;
     Bundle instanceState;
+    private DatabaseReference mDatabase;
+    private GameData gameData;
 
-    private int currentScore = 0;
-    private int HighScore = 0;
+    private long currentScore = 0;
+    private long HighScore = 0;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -46,115 +58,49 @@ public class CreateNewGame extends AppCompatActivity {
         Allies[2] = new Character("Henry");
         Allies[3] = new Character("Dave");
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(userName).exists())
+                    HighScore = (long)dataSnapshot.child(userName).getValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         super.onCreate(savedInstanceState);
         instanceState = savedInstanceState;
         Intent intent = getIntent();
-        if(intent.getBooleanExtra("Continue", false)) {
-            userName = intent.getStringExtra("Username");
-            password = intent.getStringExtra("password");
-            try {
-                loadGame(userName, password);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+        userName = intent.getStringExtra("UserName");
+        setContentView(R.layout.start_page);
+        final Button Skip = (Button) findViewById(R.id.Skip);
+        final TextView intro = (TextView) findViewById(R.id.Introduction);
+        intro.setText("You are a group of robots escaping a world that is flooding." +
+                "You find a tower full of fish who are embracing the new world order." +
+                "They will attempt to fight or help you on your way up the tower.\n Buy items in shops, rest when you can, and survive the ambushes on your way to safety");
+        Skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openShop(new ShopFloor(arrayPos, gold));
             }
-        }
-        else {
-            setContentView(R.layout.start_page);
-            final Button Skip = (Button) findViewById(R.id.Skip);
-            final TextView intro = (TextView) findViewById(R.id.Introduction);
-            intro.setText("You are a group of robots escaping a world that is flooding." +
-                    "You find a tower full of fish who are embracing the new world order." +
-                    "They will attempt to fight or help you on your way up the tower.\n Buy items in shops, rest when you can, and survive the ambushes on your way to safety");
-            Skip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openShop(new ShopFloor(currentFloor, gold));
-                }
-            });
-        }
+        });
     }
 
-    public void saveGame(String playerID, String password) throws SQLException, ClassNotFoundException
-    {
-        Class.forName ("oracle.jdbc.OracleDriver");
-        Connection conn = DriverManager.getConnection(conString);
-        Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
-        stmt.executeQuery("DELETE * FROM FLOODBOTSFLOORS WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
-        int rows = FloorList.size();
-        for(int i = 0; i < rows; i++)
-        {
-            String entryString1 = "'" + playerID + "','" + password + "', " + i + "," + FloorList.get(i)[12] + "," + FloorList.get(i)[0] + "," + FloorList.get(i)[1] + "," + FloorList.get(i)[2] + "," + FloorList.get(i)[3] + "," + FloorList.get(i)[4] + "," + FloorList.get(i)[5] + "," + FloorList.get(i)[6] + "," + FloorList.get(i)[7] + "," + FloorList.get(i)[8] + "," + FloorList.get(i)[9] + "," + FloorList.get(i)[10] + "," + FloorList.get(i)[11];
-            String entryString2 = "INSERT INTO FLOODBOTSFLOORS VALUES(" + entryString1 + ")";
-            stmt.executeUpdate(entryString2);
-        }
-
-        stmt.executeQuery("DELETE * FROM FLOODBOTSCHARACTERS WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
-        for(int i = 0; i < 4; i++)
-        {
-            String entryString1 = "'" + playerID + "','" + password + "', " + i + "," + Allies[i].getName() + "," + Allies[i].getMaxHealth() + "," + Allies[i].getHealth() + ',' + Allies[i].getAtkStat() + "," + Allies[i].getDefStat();
-            String entryString2 = "INSERT INTO FLOODBOTSCHARACTERS VALUES(" + entryString1 + ")";
-            stmt.executeUpdate(entryString2);
-        }
-
-        stmt.executeQuery("DELETE * FROM FLOODBOTSGENERAL WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
-        stmt.executeQuery("INSERT INTO FLOODBOTSGENERAL VALUES('" + playerID + "','" + password + "', " + HighScore + "," + currentScore + "," + currentFloor + "," + arrayPos + "," + floodHeight + "," + gold + "," + floodValue + ")");
-
-        stmt.close();
-        conn.close();
+    public void saveHighScore(){
+        mDatabase.child(userName).setValue(currentScore);
     }
 
-    public void loadGame(String playerID, String password) throws SQLException, ClassNotFoundException
-    {
-        Class.forName ("oracle.jdbc.OracleDriver");
-        Connection conn = DriverManager.getConnection(conString);
-        Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet rset = stmt.executeQuery("SELECT * FROM FLOODBOTSFLOORS WHERE PlayerID='" + playerID + "' AND Password='" + password + "' ORDER BY ArraySlot");
-        int rows = 0;
-        if (rset.last()) {
-            rows = rset.getRow();
-            rset.beforeFirst();
-        }
-        FloorList.clear();
-        for(int i = 0; i < rows; i++)
-        {
-            rset.next();
-            int[] temp = { rset.getInt(4), rset.getInt(5), rset.getInt(6), rset.getInt(7), rset.getInt(8), rset.getInt(9), rset.getInt(10), rset.getInt(11), rset.getInt(12), rset.getInt(13), rset.getInt(14), rset.getInt(15), rset.getInt(3) };
-            FloorList.add(temp);
-        }
-        rset.close();
-
-        ResultSet rset2 = stmt.executeQuery("SELECT * FROM FLOODBOTSCHARACTERS WHERE PlayerID='" + playerID + "' AND Password='" + password + "' ORDER BY ArraySlot");
-        Character[] loading = new Character[4];
-        for(int i = 0; i < 4; i++)
-        {
-            rset2.next();
-            loading[i].setName(rset2.getString(3));
-            loading[i].setMaxHealth(rset2.getInt(4));
-            loading[i].setHealth(rset2.getInt(5));
-            loading[i].setAtkStat(rset2.getInt(6));
-            loading[i].setDefStat(rset2.getInt(7));
-        }
-        rset2.close();
-        Allies = loading;
-
-        ResultSet rset3 = stmt.executeQuery("SELECT * FROM FLOODBOTSGENERAL WHERE PlayerID='" + playerID + "' AND Password='" + password + "'");
-        HighScore = rset3.getInt(2);
-        currentScore = rset3.getInt(3);
-        currentFloor = rset3.getInt(4);
-        arrayPos =rset3.getInt(5);
-        floodHeight = rset3.getInt(6);
-        gold = rset3.getInt(7);
-        floodValue = rset3.getInt(8);
-        rset3.close();
-
-        stmt.close();
-        conn.close();
-    }
-
-
+    /**
+     * Sets GUI and runs functionality for the Battle floor
+     * @param Current The battle floor being loaded either a new one or one passed from Floors List
+     */
     public void startBattle(final BattleFloor Current)
     {
         setContentView(R.layout.activity_create_new_game);
@@ -629,17 +575,50 @@ public class CreateNewGame extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Called and moves to the game over screen, gives the user the option to restart
+     */
     private void gameOver(){
         setContentView(R.layout.activity_game_over);
         final Button restart = (Button)findViewById(R.id.Restart);
         final TextView score = (TextView)findViewById(R.id.score);
-        final TextView highScore = (TextView)findViewById(R.id.highScore);
+        final TextView highscore1 = (TextView)findViewById(R.id.highScore1);
+        final TextView highscore2 = (TextView)findViewById(R.id.highScore2);
+        final TextView highscore3 = (TextView)findViewById(R.id.highScore3);
+        final TextView highscore4 = (TextView)findViewById(R.id.highScore4);
+        final TextView highscore5 = (TextView)findViewById(R.id.highScore5);
 
-        HighScore += 10;
+        TextView[] highScores = new TextView[5];
+        highScores[0] = highscore1;
+        highScores[1] = highscore2;
+        highScores[2] = highscore3;
+        highScores[3] = highscore4;
+        highScores[4] = highscore5;
+
+        if(currentScore > HighScore){
+            saveHighScore();
+        }
+
+
+
+        mDatabase.orderByValue().limitToLast(5).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int i = 4;
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    highScores[i].setText(childDataSnapshot.getKey() + ": " + childDataSnapshot.getValue());
+                    i--;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         score.setText("Your Score: " + currentScore);
-        highScore.setText("High Score: " + HighScore);
         restart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -654,7 +633,6 @@ public class CreateNewGame extends AppCompatActivity {
      * @param up true if moving upwards, false if going down
      */
     private void moveFloor(boolean up) throws SQLException, ClassNotFoundException {
-        saveGame(userName, password);
         if(up){
             currentFloor++;
             arrayPos++;
@@ -722,10 +700,10 @@ public class CreateNewGame extends AppCompatActivity {
         int[] items = new int[13];
 
         for(int a = 0; a < 3; a++) {
-                int i = a*3;
-                items[i] = shop.getItem(a).getCost();
-                items[(i+1)] = shop.getItem(a).getType();
-                items[(i+2)] = shop.getItem(a).getEval();
+            int i = a*3;
+            items[i] = shop.getItem(a).getCost();
+            items[(i+1)] = shop.getItem(a).getType();
+            items[(i+2)] = shop.getItem(a).getEval();
         }
 
         items[items.length - 1] = 1;
