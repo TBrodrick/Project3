@@ -180,7 +180,11 @@ public class Character {
         Health = 3 * atkStat;
         maxHealth = Health;
     }
-
+    
+    /**
+     * 
+     * @param i the item to equip
+     */
     void equipItem(Item i)
     {
         if(i.getType()==0)
