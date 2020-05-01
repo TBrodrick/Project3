@@ -588,6 +588,10 @@ public class CreateNewGame extends AppCompatActivity {
      * @param up true if moving upwards, false if going down
      */
     private void moveFloor(boolean up) {
+        floodValue++;
+        if(floodValue % 10 > 2){
+            floodHeight++;
+        }
         if(up){
             currentFloor++;
             arrayPos++;
@@ -620,10 +624,6 @@ public class CreateNewGame extends AppCompatActivity {
                 }
             }
         }
-        if(floodValue % 10 > 2){
-            floodHeight++;
-        }
-        floodValue++;
     }
 
     /**
