@@ -1,5 +1,8 @@
 package com.example.project3;
 
+/**
+ * @author Jordan White
+ */
 public class BattleFloor extends  Floors {
 
     //variables
@@ -121,12 +124,4 @@ public class BattleFloor extends  Floors {
         return Enemies[index];
     }
 
-    /**
-     *
-     * @param fn floor number
-     */
-    private void generateBoss(int fn)
-    {
-        Enemies[0] = new Enemy(fn*2,fn*2,"BOSS");
-    }
 }

@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Main Start screen
+     * @param intent the intent to be passed into the game. Contains username
+     */
     public void init(Intent intent) {
         setContentView(R.layout.activity_main);
         Button newRunButton = (Button) findViewById(R.id.newRun);
