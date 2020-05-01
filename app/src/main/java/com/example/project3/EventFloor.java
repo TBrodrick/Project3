@@ -16,6 +16,10 @@ public class EventFloor extends Floors {
         numMines = num;
     }
 
+    /**
+     * Returns the number of
+     * @return
+     */
     public int getNumMines(){
         return numMines;
     }

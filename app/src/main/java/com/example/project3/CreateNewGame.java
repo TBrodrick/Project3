@@ -93,6 +93,9 @@ public class CreateNewGame extends AppCompatActivity {
         });
     }
 
+    /**
+     * Saves high score to the database attached to the username you entered
+     */
     public void saveHighScore(){
         mDatabase.child(userName).setValue(currentScore);
     }
@@ -170,26 +173,14 @@ public class CreateNewGame extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     SaveBattleFloor(Current);
-                    try {
-                        moveFloor(true);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    moveFloor(true);
                 }
             });
             GoBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     SaveBattleFloor(Current);
-                    try {
-                        moveFloor(false);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    moveFloor(true);
                 }
             });
         }
@@ -228,26 +219,14 @@ public class CreateNewGame extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             SaveBattleFloor(Current);
-                            try {
-                                moveFloor(true);
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            }
+                            moveFloor(true);
                         }
                     });
                     GoBack.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             SaveBattleFloor(Current);
-                            try {
-                                moveFloor(false);
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            }
+                            moveFloor(true);
                         }
                     });
                 }
@@ -257,17 +236,15 @@ public class CreateNewGame extends AppCompatActivity {
         flee.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                try {
-                    moveFloor(false);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                moveFloor(true);
             }
         });
     }
 
+    /**
+     * Runs UI and some functionality of the shop floor
+     * @param Current The shop floor being loaded either a new one or one passed from Floors List
+     */
     public void openShop(final ShopFloor Current)
     {
         final ImageView[] Images = new ImageView[3];
@@ -374,26 +351,14 @@ public class CreateNewGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SaveShopFloor(Current);
-                try {
-                    moveFloor(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                moveFloor(true);
             }
         });
         GoBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SaveShopFloor(Current);
-                try {
-                    moveFloor(false);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                moveFloor(true);
             }
         });
         Buy1.setOnClickListener(new View.OnClickListener() {
@@ -425,6 +390,14 @@ public class CreateNewGame extends AppCompatActivity {
         });
     }
 
+    /**
+     * Manages UI changes for buying an item
+     * @param Buttons Array of Buttons on the shop floor
+     * @param Texts Array of TextViews on the shop floor
+     * @param Images Array of Item images on the shop floor
+     * @param index index of the item being bought
+     * @param Current The shop floor being occupied
+     */
     public void BuyItem(Button[] Buttons, TextView[] Texts, ImageView[] Images, final int index, final ShopFloor Current){
         final TextView back = (TextView)findViewById(R.id.Transparency);
         back.setText("Click the bot you wish to give the item to.");
@@ -481,6 +454,11 @@ public class CreateNewGame extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Runs UI for the Event floor
+     * @param event The Event floor being loaded either a new one or one passed from Floors List
+     */
     public void newEvent(EventFloor event)
     {
         final EventFloor Current = event;
@@ -498,25 +476,13 @@ public class CreateNewGame extends AppCompatActivity {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    moveFloor(false);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                moveFloor(true);
             }
         });
         goForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    moveFloor(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                moveFloor(true);
             }
         });
         mine.setOnClickListener(new View.OnClickListener() {
@@ -531,6 +497,10 @@ public class CreateNewGame extends AppCompatActivity {
         });
     }
 
+    /**
+     * Runs UI for the rest floor. No variables needed to be saved
+     * due to the nature of teh floor.
+     */
     public void restFloor()
     {
         final RestFloor Current = new RestFloor(Allies);
@@ -546,26 +516,13 @@ public class CreateNewGame extends AppCompatActivity {
         moveOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
                     moveFloor(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
             }
         });
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
                     moveFloor(false);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-
             }
         });
         rest.setOnClickListener(new View.OnClickListener() {
@@ -599,8 +556,6 @@ public class CreateNewGame extends AppCompatActivity {
             saveHighScore();
         }
 
-
-
         mDatabase.orderByValue().limitToLast(5).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -632,7 +587,7 @@ public class CreateNewGame extends AppCompatActivity {
      * Moves the player up or down floors
      * @param up true if moving upwards, false if going down
      */
-    private void moveFloor(boolean up) throws SQLException, ClassNotFoundException {
+    private void moveFloor(boolean up) {
         if(up){
             currentFloor++;
             arrayPos++;
@@ -672,7 +627,7 @@ public class CreateNewGame extends AppCompatActivity {
     }
 
     /**
-     * Adds the floor to FloorList if it's a new floor or sets the location at FloorList to the correct variabels
+     * Adds the floor to FloorList if it's a new floor or sets the location at FloorList to the correct variables
      * @param floor The battle floor being saved
      */
     private void SaveBattleFloor(BattleFloor floor){
@@ -696,6 +651,10 @@ public class CreateNewGame extends AppCompatActivity {
             FloorList.set(arrayPos, enemies);
     }
 
+    /**
+     * Adds the floor to FloorList if it's a new floor or sets the location at FloorList to the correct variables
+     * @param shop The shop floor being saved
+     */
     private void SaveShopFloor(ShopFloor shop){
         int[] items = new int[13];
 

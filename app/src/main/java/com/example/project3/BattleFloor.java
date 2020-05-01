@@ -39,6 +39,9 @@ public class BattleFloor extends  Floors {
         Allies = allies;
     }
 
+    /**
+     * Actions taken in a single combat round
+     */
     void attackRound()
     {
         for(int i = 0; i<4;i++)         //3 cases
