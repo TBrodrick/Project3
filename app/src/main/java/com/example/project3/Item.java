@@ -23,6 +23,12 @@ public class Item {
         effValue = 0;
     }
 
+     /**
+     * 
+     * @param c the cost
+     * @param et the effect type (0 = health, 1 = shield, 2 = attack
+     * @param ev the effect value
+     */
     public Item(int c, int et, int ev){
         name = "Placeholder";
         description = "Placeholder description.";
