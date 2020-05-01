@@ -163,4 +163,12 @@ public class ShopFloor extends Floors{
             return true;
         }
     }
+    
+    void setGold(int g){
+        gold = g;   
+    }
+   
+    int getGold(){
+        return gold;   
+    }
 }
