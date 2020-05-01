@@ -6,7 +6,6 @@ public class Floors {
     //variables
     private int floorType;      //0 for combat, 1 for shop, 2 for rest, 3 event floors, 4 rest floors
     private int floorNum;
-    private Enemy[] e = {null,null,null,null};          //an array of all enemies on this floor needs a generate enemy or get enemy
     private Character [] a;         //an array of all allies (moved from floor to floor)(get allies?)
     private int numEnemies;
 
