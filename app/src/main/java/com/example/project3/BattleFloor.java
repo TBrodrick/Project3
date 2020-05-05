@@ -61,7 +61,7 @@ public class BattleFloor extends  Floors {
                     {
                         if(Enemies[j].getHealth()>0)
                         {
-                            Enemies[i].takeDamage(Math.max(Allies[i].getAtkStat() - Enemies[i].getDefStat(), 0));
+                            Enemies[j].takeDamage(Math.max(Allies[i].getAtkStat() - Enemies[j].getDefStat(), 0));
                             break;
                         }
                     }
@@ -73,7 +73,7 @@ public class BattleFloor extends  Floors {
                     for (int j = 0; j < 4; j++)          //search for alternate enemy (make more efficient)
                     {
                         if (Allies[j].getHealth() > 0) {
-                            Allies[i].takeDamage(Math.max(Enemies[i].getAtkStat() - Allies[i].getDefStat(), 0));
+                            Allies[j].takeDamage(Math.max(Enemies[i].getAtkStat() - Allies[j].getDefStat(), 0));
                             break;
                         }
                     }
