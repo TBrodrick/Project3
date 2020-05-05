@@ -226,7 +226,7 @@ public class CreateNewGame extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             SaveBattleFloor(Current);
-                            moveFloor(true);
+                            moveFloor(false);
                         }
                     });
                 }
