@@ -180,7 +180,7 @@ public class CreateNewGame extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     SaveBattleFloor(Current);
-                    moveFloor(true);
+                    moveFloor(false);
                 }
             });
         }
@@ -236,7 +236,7 @@ public class CreateNewGame extends AppCompatActivity {
         flee.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                moveFloor(true);
+                moveFloor(false);
             }
         });
     }
@@ -358,7 +358,7 @@ public class CreateNewGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SaveShopFloor(Current);
-                moveFloor(true);
+                moveFloor(false);
             }
         });
         Buy1.setOnClickListener(new View.OnClickListener() {
@@ -467,7 +467,7 @@ public class CreateNewGame extends AppCompatActivity {
         final Button goForward = (Button)findViewById(R.id.Choice3);
         final Button mine = (Button)findViewById(R.id.Choice2);
         final TextView untilFlood = (TextView)findViewById(R.id.untilFlood);
-        untilFlood.setText("Floors until flood: " + (currentFloor - floodHeight));
+        untilFlood.setText("Floors until flood: " + (arrayPos - floodHeight));
         final int[] floor = new int[13];
         floor[floor.length - 1] = 2;
         if(arrayPos == FloorList.size())
@@ -476,7 +476,7 @@ public class CreateNewGame extends AppCompatActivity {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveFloor(true);
+                moveFloor(false);
             }
         });
         goForward.setOnClickListener(new View.OnClickListener() {
@@ -489,9 +489,9 @@ public class CreateNewGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 floodHeight++;
-                if(floodHeight >= currentFloor)
+                if(floodHeight >= arrayPos)
                     gameOver();
-                untilFlood.setText("Floors until flood: " + (currentFloor - floodHeight));
+                untilFlood.setText("Floors until flood: " + (arrayPos - floodHeight));
                 gold += Current.mine();
             }
         });
@@ -588,6 +588,10 @@ public class CreateNewGame extends AppCompatActivity {
      * @param up true if moving upwards, false if going down
      */
     private void moveFloor(boolean up) {
+        floodValue++;
+        if(floodValue % 10 > 2){
+            floodHeight++;
+        }
         if(up){
             currentFloor++;
             arrayPos++;
@@ -604,10 +608,9 @@ public class CreateNewGame extends AppCompatActivity {
             }
         }
         else {
-            if (currentFloor != 0) {
+            if (arrayPos != 0) {
                 arrayPos--;
-                currentFloor--;
-                if (currentFloor <= floodHeight || arrayPos == -1) {
+                if (arrayPos <= floodHeight || arrayPos == -1) {
                     gameOver();
                 }
                 else {
@@ -620,10 +623,6 @@ public class CreateNewGame extends AppCompatActivity {
                 }
             }
         }
-        if(floodValue % 10 > 2){
-            floodHeight++;
-        }
-        floodValue++;
     }
 
     /**
